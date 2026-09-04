@@ -35,9 +35,12 @@ The YAML format mirrors the built-in scenarios with a ``type`` and ``params``:
 
 from __future__ import annotations
 
+import importlib
+import os
+
 import yaml
 
-from modeltest.core.base import ModelSuite
+from modeltest.core.base import ModelSuite, ModelTest
 from modeltest.scenarios import (  # type: ignore[attr-defined]
     ConfidenceThresholdTest,
     DataDriftTest,
@@ -70,6 +73,84 @@ _REGISTRY = {
 }
 
 
+def register(type_name: str, cls: type) -> None:
+    """Map a YAML ``type`` string to a custom test class.
+
+    Custom tests must subclass :class:`modeltest.ModelTest`. Registering
+    before :func:`load_suite_yaml` lets a suite reference your test by name::
+
+        from modeltest.config import register
+        register("my_error_check", MyErrorCheck)
+
+        # suite.yaml
+        # suite:
+        #   tests:
+        #     - type: my_error_check
+        #       params: {max_errors: 5}
+    """
+    if not (isinstance(cls, type) and issubclass(cls, ModelTest)):
+        raise TypeError(f"register() expects a ModelTest subclass, got {cls!r}")
+    _REGISTRY[type_name] = cls
+
+
+def unregister(type_name: str) -> None:
+    """Remove a previously registered type (built-ins included)."""
+    _REGISTRY.pop(type_name, None)
+
+
+def _resolve_type(type_name: str) -> type:
+    """Look up a test class by registered name or a dotted import path.
+
+    Unknown names may be an import reference of the form ``module.path:Class``
+    or ``module.path.Class`` pointing at a custom test class. This lets a YAML
+    suite load tests defined outside modeltest without a ``register`` call.
+    """
+    if type_name in _REGISTRY:
+        return _REGISTRY[type_name]
+
+    if ":" in type_name:
+        module_path, _, attr = type_name.partition(":")
+        cls = _import_attr(module_path, attr)
+    else:
+        module_path, _, attr = type_name.rpartition(".")
+        cls = _import_attr(module_path, attr) if module_path else None
+
+    if cls is None:
+        raise ValueError(
+            f"Unknown test type {type_name!r}. Known: "
+            f"{', '.join(sorted(_REGISTRY))}. Or use module.path:Class."
+        )
+    return cls
+
+
+def _import_attr(module_path: str, attr: str) -> type:
+    module = _try_import(module_path)
+    cls = getattr(module, attr, None)
+    if cls is None:
+        raise ValueError(f"Module {module_path!r} has no attribute {attr!r}")
+    if not (isinstance(cls, type) and issubclass(cls, ModelTest)):
+        raise TypeError(f"{module_path}.{attr} is not a ModelTest subclass")
+    return cls
+
+
+def _try_import(module_path: str):
+    import sys
+
+    try:
+        return importlib.import_module(module_path)
+    except ImportError:
+        # User-defined test modules are often plain files in the working
+        # directory; make sure CWD is importable so dotted paths "just work"
+        # from the CLI as well as from library code.
+        cwd = os.getcwd()
+        if cwd not in sys.path:
+            sys.path.insert(0, cwd)
+        try:
+            return importlib.import_module(module_path)
+        except ImportError as exc:
+            raise ValueError(f"Could not import module {module_path!r}: {exc}") from exc
+
+
 def load_suite_yaml(path: str) -> ModelSuite:
     """Build a :class:`ModelSuite` from a YAML file.
 
@@ -96,10 +177,7 @@ def _build_test(raw) -> object:
         raise ValueError(f"Each test must be a mapping, got: {raw!r}")
 
     type_name = raw.get("type")
-    cls = _REGISTRY.get(type_name)
-    if cls is None:
-        known = ", ".join(sorted(_REGISTRY))
-        raise ValueError(f"Unknown test type {type_name!r}. Known: {known}")
+    cls = _resolve_type(type_name)
 
     params = raw.get("params") or {}
     if not isinstance(params, dict):

@@ -1,0 +1,10 @@
+# A suite that mixes a built-in test with a user-defined custom test.
+# The custom test is referenced by its dotted import path (module:Class),
+# so no `register()` call is needed.
+suite:
+  name: "Income Model (with custom test)"
+  tests:
+    - type: minimum_accuracy
+      params: {threshold: 0.85}
+    - type: examples.custom_tests:ZeroPredictionShareTest
+      params: {min_positive_share: 0.01}

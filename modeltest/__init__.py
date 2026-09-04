@@ -1,3 +1,4 @@
+from modeltest.config import register, unregister
 from modeltest.core.base import (
     ModelSuite,
     ModelTest,
@@ -15,4 +16,6 @@ __all__ = [
     "TestResult",
     "run_test",
     "run_suite",
+    "register",
+    "unregister",
 ]

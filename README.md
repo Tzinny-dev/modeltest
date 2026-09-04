@@ -116,6 +116,31 @@ picked automatically. Custom framework? Implement a
 > (or `modeltest`'s `explain` extra). You can also pass your own explainer
 > callable to any explainability test.
 
+## Custom tests
+
+Any class subclassing `ModelTest` can be referenced from a YAML suite
+directly, by dotted import path — no registration required:
+
+```yaml
+suite:
+  name: "Income Model"
+  tests:
+    - type: minimum_accuracy
+      params: {threshold: 0.85}
+    - type: myproject.custom_tests:ZeroPredictionShareTest
+      params: {min_positive_share: 0.01}
+```
+
+Both `module.path:Class` and `module.path.Class` work. The module is looked
+up on the import path (your current working directory is added automatically).
+Programmatic registration is also available for short, friendlier names:
+
+```python
+from modeltest import register
+register("zero_share", ZeroPredictionShareTest)
+# ...now use `type: zero_share` in YAML
+```
+
 ## Development
 
 Install dev tools and run the quality gates:
