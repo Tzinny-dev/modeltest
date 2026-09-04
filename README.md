@@ -147,6 +147,34 @@ register("zero_share", ZeroPredictionShareTest)
 # ...now use `type: zero_share` in YAML
 ```
 
+## MLflow integration
+
+Log a finished validation run into [MLflow](https://mlflow.org/) as an
+experiment run — one param per test, one metric per numeric value, and the
+full JSON report saved as an artifact.
+
+```bash
+pip install modeltest[mlflow]
+```
+
+```python
+import mlflow
+from modeltest import ModelSuite
+from modeltest.integrations.mlflow import log_suite_result
+from modeltest.scenarios import MinimumAccuracyTest
+
+suite = ModelSuite(name="fraud-v2")
+suite.add_test(MinimumAccuracyTest(threshold=0.85))
+result = suite.run(model, X_val, y_val)
+
+with mlflow.start_run():
+    log_suite_result(result)
+```
+
+`log_suite_result` also supports a `run_id` parameter for logging into a
+specific (possibly already-finished) run, plus optional `param_prefix` /
+`metric_prefix` to namespace the logged names.
+
 ## Development
 
 Install dev tools and run the quality gates:
