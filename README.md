@@ -5,6 +5,7 @@
 [![PyPI version](https://img.shields.io/pypi/v/modeltest.svg)](https://pypi.org/project/modeltest/)
 [![Python](https://img.shields.io/pypi/pyversions/modeltest.svg)](https://pypi.org/project/modeltest/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Donate](https://img.shields.io/badge/donate-PayPal-blue.svg)](https://paypal.me/carlostzin)
 
 `modeltest` is a unit-testing framework for machine learning models. It lets you
 define contracts for model quality, robustness, fairness, and data invariants,
