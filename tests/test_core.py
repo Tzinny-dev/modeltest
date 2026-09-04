@@ -135,3 +135,61 @@ class TestReport:
         assert "<testsuite" in xml
         assert 'name="fraud"' in xml
         assert "MinimumAccuracyTest" in xml
+
+
+class TestFingerprintFallbacks:
+    def test_pickle_fallback_for_plain_array(self):
+        ctx = TestContext(model=None, X_val=np.array([[1.0, 2.0]]), y_val=[1])
+        fp1 = ctx._fingerprint(np.array([[1.0, 2.0]]))
+        fp2 = ctx._fingerprint(np.array([[1.0, 2.0]]))
+        assert fp1 == fp2
+        assert ctx._fingerprint(np.array([[9.0, 9.0]])) != fp1
+
+    def test_id_fallback_when_unpicklable(self, monkeypatch):
+        ctx = TestContext(model=None, X_val=[], y_val=[])
+        import pickle as _pickle
+
+        def _boom(*a, **k):
+            raise RuntimeError("cannot pickle")
+
+        monkeypatch.setattr(_pickle, "dumps", _boom)
+        x = object()
+        key = ctx._fingerprint([x])  # list holds an object -> id fallback
+        assert key.startswith("id-")
+
+    def test_predict_proba_through_context(self):
+        X, y = _make_data()
+        model, feats, X_val, y_val = _build_pass_model(X, y)
+        ctx = TestContext(model=model, X_val=X_val[feats], y_val=y_val)
+        proba = ctx.predict_proba()
+        assert proba is not None
+        assert proba.shape == (len(X_val), 2)
+
+    def test_predict_none_uses_xval(self):
+        X, y = _make_data()
+        model, feats, X_val, y_val = _build_pass_model(X, y)
+        ctx = TestContext(model=model, X_val=X_val[feats], y_val=y_val)
+        pred = ctx.predict()  # X=None -> predicts on X_val
+        assert pred.shape == (len(X_val),)
+
+    def test_cache_disabled_predicts_fresh(self, monkeypatch):
+        X, y = _make_data()
+        model, feats, X_val, y_val = _build_pass_model(X, y)
+        calls = []
+        from modeltest.wrappers import wrap
+
+        wrapped = wrap(model)
+        original_predict = wrapped.predict
+
+        def counting_predict(X):
+            calls.append(X)
+            return original_predict(X)
+
+        monkeypatch.setattr(wrapped, "predict", counting_predict)
+        ctx = TestContext(
+            model=wrapped, X_val=X_val[feats], y_val=y_val, cache_predictions=False
+        )
+        ctx._wrapper = wrapped
+        ctx.predict()
+        ctx.predict()
+        assert len(calls) == 2
