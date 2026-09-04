@@ -95,3 +95,15 @@ class TestConfidenceThreshold:
         ctx = _make_ctx()
         result = ConfidenceThresholdTest(bound="middle", n_boot=50).run(ctx)
         assert result.status == TestStatus.ERROR
+
+
+class TestUtilsEdgeCases:
+    def test_min_max_ratio_with_single_value(self):
+        from modeltest.scenarios._utils import min_max_ratio
+
+        assert min_max_ratio({"m": 0.5}) == 1.0
+
+    def test_min_max_ratio_ignores_zero(self):
+        from modeltest.scenarios._utils import min_max_ratio
+
+        assert min_max_ratio({"a": 0.0, "b": 0.5, "c": 1.0}) == 0.5

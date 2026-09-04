@@ -34,6 +34,9 @@ class TestPsiFunction:
         val = np.full(100, 7.0)
         assert psi(val, val) == 0.0
 
+    def test_empty_inputs_zero(self):
+        assert psi([], []) == 0.0
+
 
 class TestKsFunction:
     def test_identical_is_small(self):
@@ -46,6 +49,9 @@ class TestKsFunction:
         a = rng.normal(0, 1, 10000)
         b = rng.normal(4, 1, 10000)
         assert ks_statistic(a, b) > 0.5
+
+    def test_empty_inputs_zero(self):
+        assert ks_statistic([], []) == 0.0
 
 
 class TestDataDrift:

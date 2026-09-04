@@ -93,6 +93,18 @@ class TestFeatureDominance:
         result = FeatureDominanceTest(max_top_share=0.9).run(ctx)
         assert result.status == TestStatus.FAILED
 
+    def test_all_zero_attribution_fails(self):
+        # A stub explainer returning zeros -> degenerate "all zero" path.
+        def zero_explainer(model, X):
+            return np.zeros((len(X), len(X.columns)))
+
+        X = pd.DataFrame({"a": [1, 2], "b": [3, 4]})
+        result = FeatureDominanceTest(max_top_share=0.9, explainer=zero_explainer).run(
+            TestContext(model=None, X_val=X, y_val=[0, 1])
+        )
+        assert result.status == TestStatus.FAILED
+        assert "degenerate" in result.detail
+
 
 class TestTopFeatures:
     def test_expected_features_present(self):
