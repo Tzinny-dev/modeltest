@@ -51,9 +51,9 @@ mlflow = ["mlflow"]
 modeltest = "modeltest.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/Tzinny-dev/model-test"
-Repository = "https://github.com/Tzinny-dev/model-test"
-Issues = "https://github.com/Tzinny-dev/model-test/issues"
+Homepage = "https://github.com/Tzinny-dev/modeltest"
+Repository = "https://github.com/Tzinny-dev/modeltest"
+Issues = "https://github.com/Tzinny-dev/modeltest/issues"
 
 [tool.setuptools.packages.find]
 include = ["modeltest*"]

@@ -3,7 +3,7 @@ name: Release to PyPI
 # Publishes `modeltest` to PyPI when a `v*` tag is pushed.
 # Requires PyPI Trusted Publishing to be configured for this repo:
 #   PyPI -> Account settings -> Publishing -> Add publisher
-#   owner: Tzinny-dev, repo: model-test, workflow: release.yml
+#   owner: Tzinny-dev, repo: modeltest, workflow: release.yml
 
 on:
   push:
