@@ -132,3 +132,41 @@ def test_validate_train_data_for_drift(artifacts, tmp_path):
         ]
     )
     assert code == 0
+
+
+def test_main_guard_runs_as_script(artifacts, tmp_path, monkeypatch):
+    import runpy
+    import sys
+
+    from modeltest.cli import _build_pass
+
+    # Cover the standalone _build_pass helper.
+    assert _build_pass() is True
+
+    model_path, data_path = artifacts
+    suite_path = tmp_path / "suite.yaml"
+    suite_path.write_text(
+        "suite:\n  name: cli\n  tests:\n"
+        "    - type: minimum_accuracy\n      params: {threshold: 0.1}\n"
+    )
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "modeltest",
+            "validate",
+            "--suite",
+            str(suite_path),
+            "--model",
+            model_path,
+            "--data",
+            data_path,
+            "--target",
+            "target",
+        ],
+    )
+    import modeltest.cli as cli_mod
+
+    with pytest.raises(SystemExit) as exc:
+        runpy.run_path(cli_mod.__file__, run_name="__main__")
+    assert exc.value.code == 0

@@ -2,6 +2,7 @@
 
 import numpy as np
 import pandas as pd
+import pytest
 from sklearn.ensemble import RandomForestClassifier
 
 from modeltest import ModelSuite, ModelTest, TestContext
@@ -123,6 +124,15 @@ class TestSuite:
         suite.add_test(AlwaysPass())
         assert suite.run(model, X_val[feats], y_val).passed
 
+    def test_run_test_entry_point(self):
+        from modeltest.core.runner import run_test
+
+        X, y = _make_data()
+        model, feats, X_val, y_val = _build_pass_model(X, y)
+        ctx = TestContext(model=model, X_val=X_val[feats], y_val=y_val)
+        result = run_test(MinimumAccuracyTest(threshold=0.0), ctx)
+        assert result.passed
+
 
 class TestReport:
     def test_junit_xml_is_well_formed(self):
@@ -156,6 +166,17 @@ class TestFingerprintFallbacks:
         x = object()
         key = ctx._fingerprint([x])  # list holds an object -> id fallback
         assert key.startswith("id-")
+
+    def test_fingerprint_fallback_when_hash_fails(self, monkeypatch):
+        # hash_pandas_object raises -> falls back to pickle-based digest.
+        ctx = TestContext(model=None, X_val=_make_data()[0], y_val=[])
+
+        def _boom(obj, **k):
+            raise RuntimeError("cannot hash")
+
+        monkeypatch.setattr("pandas.util.hash_pandas_object", _boom)
+        fp = ctx._fingerprint(pd.DataFrame({"a": [1, 2]}))
+        assert len(fp) == 40  # sha1 hex digest
 
     def test_predict_proba_through_context(self):
         X, y = _make_data()
@@ -193,3 +214,50 @@ class TestFingerprintFallbacks:
         ctx.predict()
         ctx.predict()
         assert len(calls) == 2
+
+
+class TestContextExtras:
+    def test_model_name_defaults_to_type_name(self):
+        ctx = TestContext(model="dummy_str", X_val=[], y_val=[])
+        assert ctx.model_name == "str"
+
+    def test_model_name_from_metadata(self):
+        ctx = TestContext(
+            model=object(), X_val=[], y_val=[], metadata={"model_name": "fraud_v2"}
+        )
+        assert ctx.model_name == "fraud_v2"
+
+
+class TestModelTestBase:
+    def test_abstract_test_raises_not_implemented(self):
+        class Bare(_base.ModelTest):
+            pass
+
+        result = Bare().run(TestContext(model=None, X_val=[], y_val=[]))
+        assert result.status == TestStatus.ERROR
+        assert "NotImplementedError" in result.detail
+
+    def test_returning_testresult_short_circuits(self):
+        from modeltest.core.base import TestResult
+
+        class ReturnsResult(_base.ModelTest):
+            def test(self, ctx):
+                return TestResult(
+                    name="explicit", status=TestStatus.SKIPPED, detail="opt-out"
+                )
+
+        result = ReturnsResult().run(TestContext(model=None, X_val=[], y_val=[]))
+        assert result.status == TestStatus.SKIPPED
+        assert result.detail == "opt-out"
+
+
+class TestNowMsAndAssertMetric:
+    def test_now_ms_monotonic(self):
+        a = _base._now_ms()
+        b = _base._now_ms()
+        assert b >= a
+
+    def test_assert_metric_passes_and_fails(self):
+        _base.assert_metric(0.8, 0.5, lambda a, e: a > e, "hs")
+        with pytest.raises(AssertionError, match="too low"):
+            _base.assert_metric(0.4, 0.5, lambda a, e: a > e, "too low")

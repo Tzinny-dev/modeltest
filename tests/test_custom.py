@@ -107,3 +107,23 @@ class TestCustomSuiteRun:
         result = suite.run(model, X, y)
         assert result.num_passed == 1
         assert result.passed
+
+
+class TestTryImportCwdFallback:
+    def test_adds_cwd_to_sys_path_when_missing(self, tmp_path, monkeypatch):
+        import sys
+
+        from modeltest.config import _try_import
+
+        # A module that is only importable when CWD is on sys.path.
+        (tmp_path / "cwd_mod.py").write_text("VALUE = 42\n")
+        monkeypatch.chdir(tmp_path)
+
+        cwd_str = str(tmp_path)
+        # Drop CWD (and the empty-string entry) from sys.path to force the
+        # first import to fail, then make sure CWD gets re-added.
+        new_path = [p for p in sys.path if p and p != cwd_str]
+        monkeypatch.setattr(sys, "path", new_path)
+
+        mod = _try_import("cwd_mod")
+        assert mod.VALUE == 42

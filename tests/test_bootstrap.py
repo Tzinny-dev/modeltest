@@ -2,6 +2,7 @@
 
 import numpy as np
 import pandas as pd
+import pytest
 from sklearn.ensemble import RandomForestClassifier
 
 from modeltest import TestContext
@@ -107,3 +108,28 @@ class TestUtilsEdgeCases:
         from modeltest.scenarios._utils import min_max_ratio
 
         assert min_max_ratio({"a": 0.0, "b": 0.5, "c": 1.0}) == 0.5
+
+
+class TestResolveMetric:
+    def test_precision_recall_f1(self):
+        y_true = np.array([1, 0, 1, 1, 0, 1])
+        y_pred = np.array([1, 0, 1, 0, 0, 1])
+        for name in ("precision", "recall", "f1"):
+            fn = resolve_metric(name)
+            val = fn(y_true, y_pred)
+            assert 0.0 <= val <= 1.0
+
+    def test_roc_auc(self):
+        y_true = np.array([1, 0, 1, 1, 0, 1])
+        y_pred = np.array([1, 0, 1, 0, 0, 1])
+        assert 0.0 <= resolve_metric("roc_auc")(y_true, y_pred) <= 1.0
+
+    def test_unknown_metric_raises(self):
+        with pytest.raises(ValueError, match="Unknown metric"):
+            resolve_metric("not_a_metric")
+
+    def test_precision_lazy_via_metrics_dict(self):
+        # exercise the `fn is None -> _sk_metric` branch of resolve_metric
+        y_true = np.array([1, 0, 1])
+        y_pred = np.array([1, 0, 1])
+        assert resolve_metric("precision")(y_true, y_pred) == 1.0

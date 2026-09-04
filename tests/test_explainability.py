@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 import pytest
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
 
 from modeltest import TestContext
 from modeltest.core.base import TestStatus
@@ -104,6 +105,52 @@ class TestFeatureDominance:
         )
         assert result.status == TestStatus.FAILED
         assert "degenerate" in result.detail
+
+
+class TestKernelExplainerFallback:
+    def _logistic_ctx(self):
+        # LogisticRegression is not supported by TreeExplainer, forcing the
+        # KernelExplainer fallback path in _default_shap_explainer.
+        rng = np.random.default_rng(0)
+        X = pd.DataFrame({"a": rng.normal(size=200), "b": rng.normal(size=200)})
+        y = (X["a"] > 0).astype(int)
+        model = LogisticRegression(max_iter=1000).fit(X, y)
+        return TestContext(model=wrap(model), X_val=X, y_val=y)
+
+    def test_falls_back_to_kernel_explainer(self):
+        ctx = self._logistic_ctx()
+        # Logistic's single dominant feature has share==1.0, so only a
+        # threshold of 1.0 lets it pass after the Kernel fallback.
+        result = FeatureDominanceTest(max_top_share=1.0).run(ctx)
+        assert result.status == TestStatus.PASSED
+
+    def test_top_features_with_kernel_fallback(self):
+        ctx = self._logistic_ctx()
+        result = TopFeaturesTest(expected_features=["a"], k=1).run(ctx)
+        assert result.status == TestStatus.PASSED
+
+
+class TestExplainabilityImportGuards:
+    def test_missing_sklearn_pipeline_is_skipped(self, monkeypatch):
+        """Cover the `except ImportError` guard around the Pipeline branch."""
+        import builtins
+
+        real_import = builtins.__import__
+
+        def _no_pipeline(name, *args, **kwargs):
+            if name == "sklearn.pipeline":
+                raise ImportError("simulated missing pipeline")
+            return real_import(name, *args, **kwargs)
+
+        monkeypatch.setattr(builtins, "__import__", _no_pipeline)
+
+        rng = np.random.default_rng(0)
+        X = pd.DataFrame({"a": rng.normal(size=150), "b": rng.normal(size=150)})
+        y = (X["a"] > 0).astype(int)
+        model = RandomForestClassifier(n_estimators=20, random_state=0).fit(X, y)
+        ctx = TestContext(model=wrap(model), X_val=X, y_val=y)
+        result = FeatureDominanceTest(max_top_share=0.9).run(ctx)
+        assert result.status == TestStatus.PASSED or result.status == TestStatus.FAILED
 
 
 class TestTopFeatures:

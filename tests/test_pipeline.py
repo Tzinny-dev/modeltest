@@ -2,6 +2,7 @@
 
 import numpy as np
 import pandas as pd
+from sklearn.base import BaseEstimator, TransformerMixin
 from sklearn.compose import ColumnTransformer
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.pipeline import Pipeline
@@ -92,4 +93,30 @@ class TestPipelineExplainability:
         pipe, df, y = _build_pipeline(n=600)
         ctx = TestContext(model=pipe, X_val=df, y_val=y)
         result = FeatureDominanceTest(max_top_share=0.9).run(ctx)
+        assert result.status == TestStatus.PASSED
+
+    def test_fallback_names_when_transformer_lacks_get_feature_names_out(self):
+        # A transformer that marks itself fitted but exposes no
+        # get_feature_names_out -> the explainer falls back to positional
+        # names (names=None) instead of crashing.
+        class SelectA(BaseEstimator, TransformerMixin):
+            def fit(self, X, y=None):
+                self.features_ = ["a"]
+                return self
+
+            def transform(self, X):
+                return X[["a"]]
+
+        rng = np.random.default_rng(0)
+        X = pd.DataFrame({"a": rng.normal(size=200), "b": rng.normal(size=200)})
+        y = (X["a"] > 0).astype(int)
+        pipe = Pipeline(
+            [
+                ("sel", SelectA()),
+                ("clf", RandomForestClassifier(n_estimators=20, random_state=0)),
+            ]
+        ).fit(X, y)
+        ctx = TestContext(model=pipe, X_val=X, y_val=y)
+        # Single engineered feature -> share 1.0, use max_top_share=1.0 to pass.
+        result = FeatureDominanceTest(max_top_share=1.0).run(ctx)
         assert result.status == TestStatus.PASSED
