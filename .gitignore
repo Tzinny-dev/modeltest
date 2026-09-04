@@ -13,3 +13,6 @@ examples/model.pkl
 examples/train.csv
 examples/validation.csv
 reports/
+
+# MLflow local tracking store
+mlruns/
