@@ -92,7 +92,7 @@ jobs:
         with:
           name: Model validation
           path: reports/model-validation.xml
-          reporter: junit
+          reporter: jest-junit
 
       - name: Fail if model didn't pass
         if: steps.validation.outcome != 'success'
