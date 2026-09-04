@@ -138,11 +138,6 @@ def test_main_guard_runs_as_script(artifacts, tmp_path, monkeypatch):
     import runpy
     import sys
 
-    from modeltest.cli import _build_pass
-
-    # Cover the standalone _build_pass helper.
-    assert _build_pass() is True
-
     model_path, data_path = artifacts
     suite_path = tmp_path / "suite.yaml"
     suite_path.write_text(

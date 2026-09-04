@@ -9,10 +9,6 @@ from typing import Optional
 from modeltest.core.base import ModelSuite
 
 
-def _build_pass() -> bool:
-    return True
-
-
 def main(argv: Optional[list] = None) -> int:
     parser = argparse.ArgumentParser(
         prog="modeltest", description="Unit tests for machine learning models."

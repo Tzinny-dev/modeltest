@@ -87,7 +87,7 @@ suite:
 `TestContext` talks to models through a small adapter interface
 (`modeltest.wrappers`). Out of the box it normalizes:
 
-- **scikit-learn** estimators(`predict`, and `predict_proba` when available)
+- **scikit-learn** estimators (`predict`, and `predict_proba` when available)
 - **PyTorch** `nn.Module` (`predict` = argmax over logits, `predict_proba` = softmax)
 - **Keras / TensorFlow** models (binary threshold or multiclass argmax)
 

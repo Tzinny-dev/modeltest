@@ -125,6 +125,8 @@ class TestContext:
 class TestResult:
     """Outcome of running a single test."""
 
+    __test__ = False  # pytest: an outcome object, not a test hook
+
     name: str
     status: TestStatus
     detail: str = ""
