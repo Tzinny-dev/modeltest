@@ -5,6 +5,7 @@ each test receives a rich context (model + data + metadata) instead of a
 bare function signature. A test *passes* by returning normally and *fails*
 by raising an assertion / returning a TestResult with passed=False.
 """
+
 from __future__ import annotations
 
 from dataclasses import dataclass, field
@@ -38,10 +39,86 @@ class TestContext:
     X_train: Optional[Any] = None
     y_train: Optional[Any] = None
     metadata: Dict[str, Any] = field(default_factory=dict)
+    cache_predictions: bool = True
+
+    # Per-suite prediction cache shared across every test that runs on this
+    # context (run_suite passes the same instance to all tests).
+    _cache: Optional[Dict[str, Any]] = field(default=None, repr=False)
+
+    _wrapper: Optional[Any] = field(default=None, repr=False)
 
     @property
     def model_name(self) -> str:
         return str(self.metadata.get("model_name", type(self.model).__name__))
+
+    def _wrapped(self) -> Any:
+        """Return a normalized wrapper around ``self.model`` (lazily built)."""
+        if self._wrapper is None:
+            from modeltest.wrappers import wrap
+
+            self._wrapper = wrap(self.model)
+        return self._wrapper
+
+    def predict(self, X: Any = None) -> Any:
+        """Predict with caching.
+
+        Delegates to the model via the framework adapter while transparently
+        dropping non-feature columns (via ``model_features``). When
+        ``cache_predictions`` is on, the result is keyed by a content hash of
+        the input so that multiple tests predicting on the *same data* run the
+        model only once per suite.
+
+        Passing ``X=None`` predicts on ``self.X_val``.
+        """
+        from modeltest.scenarios._utils import model_features
+
+        X = self.X_val if X is None else X
+        wrapped = self._wrapped()
+        X_feat = model_features(wrapped, X)
+
+        if not self.cache_predictions:
+            return wrapped.predict(X_feat)
+
+        if self._cache is None:
+            self._cache = {}
+
+        key = self._fingerprint(X_feat)
+        cached = self._cache.get(key)
+        if cached is not None:
+            return cached
+        pred = wrapped.predict(X_feat)
+        self._cache[key] = pred
+        return pred
+
+    def predict_proba(self, X: Any = None) -> Any:
+        """Probability estimates via the wrapper (or ``None`` if unsupported)."""
+        from modeltest.scenarios._utils import model_features
+
+        X = self.X_val if X is None else X
+        return self._wrapped().predict_proba(model_features(self._wrapped(), X))
+
+    @staticmethod
+    def _fingerprint(X: Any) -> str:
+        """Cheap-ish content key for a validation input."""
+        import hashlib
+
+        if hasattr(X, "columns") and hasattr(X, "values"):
+            # pandas DataFrame / Series: hash column names + row content.
+            try:
+                from pandas.util import hash_pandas_object
+
+                h = hashlib.sha1()
+                h.update("|".join(map(str, X.columns)).encode())
+                h.update(hash_pandas_object(X, index=True).values.tobytes())
+                return h.hexdigest()
+            except Exception:  # noqa: BLE001 - fall back below
+                pass
+        try:
+            import pickle
+
+            return hashlib.sha1(pickle.dumps(X, protocol=4)).hexdigest()
+        except Exception:  # noqa: BLE001
+            return f"id-{id(X)}"
 
 
 @dataclass
@@ -172,6 +249,8 @@ class _ResultProxy:
     pass
 
 
-def assert_metric(actual: float, expected: Any, op: Callable[[float, Any], bool], msg: str) -> None:
+def assert_metric(
+    actual: float, expected: Any, op: Callable[[float, Any], bool], msg: str
+) -> None:
     if not op(actual, expected):
         raise AssertionError(msg)

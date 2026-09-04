@@ -1,4 +1,5 @@
 """Tests for YAML suite loading/serialisation."""
+
 import textwrap
 
 import pytest

@@ -1,19 +1,19 @@
 """Pytest suite for the core primitives."""
+
 import numpy as np
 import pandas as pd
-import pytest
 from sklearn.ensemble import RandomForestClassifier
 
 from modeltest import ModelSuite, ModelTest, TestContext
 from modeltest.core import base as _base
-
-TestStatus = _base.TestStatus
 from modeltest.core.report import to_junit_xml
 from modeltest.scenarios import (
     GroupPerformanceTest,
     MinimumAccuracyTest,
     RobustnessTest,
 )
+
+TestStatus = _base.TestStatus
 
 
 def _make_data():
@@ -78,7 +78,13 @@ class TestGroupPerformance:
         X_val["_extra"] = np.random.default_rng(0).normal(size=len(X_val))
         result = GroupPerformanceTest(
             metric="accuracy", threshold=0.0, group_col="_gender"
-        ).run(TestContext(model=model, X_val=X_val[feats + ["_gender", "_extra"]], y_val=y_val))
+        ).run(
+            TestContext(
+                model=model,
+                X_val=X_val[feats + ["_gender", "_extra"]],
+                y_val=y_val,
+            )
+        )
         assert result.passed
 
 
@@ -86,9 +92,9 @@ class TestRobustness:
     def test_passes_small_noise(self):
         X, y = _make_data()
         model, feats, X_val, y_val = _build_pass_model(X, y)
-        result = RobustnessTest(
-            noise_std=10, max_drop=0.05, metric="accuracy"
-        ).run(TestContext(model=model, X_val=X_val[feats], y_val=y_val))
+        result = RobustnessTest(noise_std=10, max_drop=0.05, metric="accuracy").run(
+            TestContext(model=model, X_val=X_val[feats], y_val=y_val)
+        )
         assert result.passed
 
 

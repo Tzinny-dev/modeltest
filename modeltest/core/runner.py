@@ -1,4 +1,5 @@
 """Test execution entry points."""
+
 from __future__ import annotations
 
 from modeltest.core.base import ModelSuite, ModelTest, SuiteResult, TestContext

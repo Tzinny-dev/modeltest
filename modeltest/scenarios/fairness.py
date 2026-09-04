@@ -1,7 +1,8 @@
 """Fairness tests: detect unintended bias across protected groups."""
+
 from __future__ import annotations
 
-from typing import Any, Callable, Dict
+from typing import Any
 
 import numpy as np
 
@@ -10,7 +11,6 @@ from modeltest.scenarios._utils import (
     group_rates,
     max_pairwise_gap,
     min_max_ratio,
-    model_features,
 )
 
 
@@ -33,7 +33,7 @@ class EqualOpportunityTest(ModelTest):
         self.pos_label = pos_label
 
     def test(self, ctx: TestContext) -> Any:
-        y_pred = np.asarray(ctx.model.predict(model_features(ctx.model, ctx.X_val)))
+        y_pred = np.asarray(ctx.predict())
         rates = group_rates(ctx.y_val, y_pred, ctx.X_val[self.protected_col])
         tprs = {g: r["tpr"] for g, r in rates.items()}
         gap = max_pairwise_gap(tprs)
@@ -65,7 +65,7 @@ class StatisticalParityTest(ModelTest):
         self.pos_label = pos_label
 
     def test(self, ctx: TestContext) -> Any:
-        y_pred = np.asarray(ctx.model.predict(model_features(ctx.model, ctx.X_val)))
+        y_pred = np.asarray(ctx.predict())
         rates = group_rates(ctx.y_val, y_pred, ctx.X_val[self.protected_col])
         sel = {g: r["selection_rate"] for g, r in rates.items()}
 

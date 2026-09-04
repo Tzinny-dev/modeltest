@@ -1,12 +1,12 @@
 """Performance tests: global and per-subgroup quality thresholds."""
+
 from __future__ import annotations
 
-from typing import Any, Callable, Optional
+from typing import Any, Callable
 
 import numpy as np
 
 from modeltest.core.base import ModelTest, TestContext
-from modeltest.scenarios._utils import model_features
 
 _METRICS = {
     "accuracy": lambda yt, yp: float(np.mean(np.asarray(yt) == np.asarray(yp))),
@@ -46,7 +46,7 @@ class MinimumAccuracyTest(ModelTest):
 
     def test(self, ctx: TestContext) -> Any:
         fn = resolve_metric(self.metric)
-        score = fn(ctx.y_val, ctx.model.predict(model_features(ctx.model, ctx.X_val)))
+        score = fn(ctx.y_val, ctx.predict())
         assert score >= self.threshold, (
             f"{self.metric} = {score:.4f} < threshold {self.threshold}"
         )
@@ -71,7 +71,7 @@ class GroupPerformanceTest(ModelTest):
 
     def test(self, ctx: TestContext) -> Any:
         fn = resolve_metric(self.metric)
-        y_pred = np.asarray(ctx.model.predict(model_features(ctx.model, ctx.X_val)))
+        y_pred = np.asarray(ctx.predict())
         y_true = np.asarray(ctx.y_val)
         groups = ctx.X_val[self.group_col].astype(str)
         for g in np.unique(groups):

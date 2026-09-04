@@ -26,9 +26,8 @@ The YAML format mirrors the built-in scenarios with a ``type`` and ``params``:
         - type: data_invariant
           params: {expected_columns: [age, income], max_null_ratio: 0.02}
 """
-from __future__ import annotations
 
-from typing import Optional
+from __future__ import annotations
 
 import yaml
 
@@ -101,13 +100,12 @@ def _build_test(raw) -> object:
     import inspect
 
     sig = inspect.signature(cls.__init__)
-    valid = {
-        k for k in sig.parameters if k not in ("self", "args", "kwargs")
-    }
+    valid = {k for k in sig.parameters if k not in ("self", "args", "kwargs")}
     unknown = set(params) - valid
     if unknown:
         raise ValueError(
-            f"Unknown params for {type_name!r}: {sorted(unknown)}. Valid: {sorted(valid)}"
+            f"Unknown params for {type_name!r}: {sorted(unknown)}. "
+            f"Valid: {sorted(valid)}"
         )
     return cls(**params)
 

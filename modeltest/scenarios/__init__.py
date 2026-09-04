@@ -1,4 +1,5 @@
 """Built-in test scenarios shipped with modeltest."""
+
 from modeltest.scenarios.data import DataInvariantTest, NoNullTest
 from modeltest.scenarios.drift import DataDriftTest, KSTest
 from modeltest.scenarios.fairness import EqualOpportunityTest, StatisticalParityTest

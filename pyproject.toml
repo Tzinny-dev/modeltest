@@ -21,10 +21,24 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-dev = ["pytest"]
+dev = [
+    "pytest",
+    "pytest-cov",
+    "ruff",
+    "pre-commit",
+]
 
 [project.scripts]
 modeltest = "modeltest.cli:main"
 
 [tool.setuptools.packages.find]
 include = ["modeltest*"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py39"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B"]
+ignore = []
+

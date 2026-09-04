@@ -1,4 +1,5 @@
 """Report rendering: console table, JSON, and JUnit XML (for CI/CD)."""
+
 from __future__ import annotations
 
 import json
@@ -8,8 +9,12 @@ from modeltest.core.base import SuiteResult, TestResult, TestStatus
 
 
 def _symbol(r: TestResult) -> str:
-    return {TestStatus.PASSED: "PASS", TestStatus.FAILED: "FAIL",
-            TestStatus.ERROR: "ERROR", TestStatus.SKIPPED: "SKIP"}[r.status]
+    return {
+        TestStatus.PASSED: "PASS",
+        TestStatus.FAILED: "FAIL",
+        TestStatus.ERROR: "ERROR",
+        TestStatus.SKIPPED: "SKIP",
+    }[r.status]
 
 
 def render_report(result: SuiteResult, style: str = "table") -> str:
@@ -57,7 +62,7 @@ def to_junit_xml(result: SuiteResult) -> str:
     total = len(result.results)
     timestamp = datetime.now(timezone.utc).isoformat(timespec="seconds")
 
-    xml = [f'<?xml version="1.0" encoding="UTF-8"?>']
+    xml = ['<?xml version="1.0" encoding="UTF-8"?>']
     xml.append(
         f'<testsuite name="{_esc(result.suite_name)}" tests="{total}" '
         f'failures="{failures}" errors="{errors}" skipped="0" '

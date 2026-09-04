@@ -1,5 +1,11 @@
-from modeltest.core.base import ModelTest, ModelSuite, SuiteResult, TestContext, TestResult
-from modeltest.core.runner import run_test, run_suite
+from modeltest.core.base import (
+    ModelSuite,
+    ModelTest,
+    SuiteResult,
+    TestContext,
+    TestResult,
+)
+from modeltest.core.runner import run_suite, run_test
 
 __all__ = [
     "ModelTest",

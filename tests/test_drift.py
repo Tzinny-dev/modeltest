@@ -1,17 +1,15 @@
 """Tests for drift scenarios (PSI / KS)."""
+
 import numpy as np
 import pandas as pd
-import pytest
 
-from modeltest import ModelTest, TestContext
+from modeltest import TestContext
 from modeltest.core.base import TestStatus
 from modeltest.scenarios import DataDriftTest, KSTest
 from modeltest.scenarios._utils import ks_statistic, psi
 
 
-def _ctx(
-    train: pd.DataFrame, val: pd.DataFrame, model=None
-) -> TestContext:
+def _ctx(train: pd.DataFrame, val: pd.DataFrame, model=None) -> TestContext:
     return TestContext(model=model, X_train=train, X_val=val, y_val=val.index)
 
 

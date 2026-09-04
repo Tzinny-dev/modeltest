@@ -1,12 +1,22 @@
 PYTHON ?= python3
+RUFF ?= ruff
 
-.PHONY: install test example validate clean
+.PHONY: install lint format test example validate precommit clean
 
 install:
 	$(PYTHON) -m pip install -e ".[dev]"
 
+lint:
+	$(RUFF) check modeltest/ tests/
+
+format:
+	$(RUFF) format modeltest/ tests/
+
 test: install
 	$(PYTHON) -m pytest tests/ -q
+
+precommit:
+	pre-commit install
 
 example:
 	$(PYTHON) examples/basic.py

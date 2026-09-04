@@ -1,10 +1,11 @@
 """Tests for fairness scenarios."""
+
 import numpy as np
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 
-from modeltest import ModelTest, TestContext
+from modeltest import TestContext
 from modeltest.core.base import TestStatus
 from modeltest.scenarios import EqualOpportunityTest, StatisticalParityTest
 from modeltest.scenarios._utils import group_rates

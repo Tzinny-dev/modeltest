@@ -1,4 +1,5 @@
-"""Command-line interface: `modeltest validate`. """
+"""Command-line interface: `modeltest validate`."""
+
 from __future__ import annotations
 
 import argparse
@@ -26,8 +27,12 @@ def main(argv: Optional[list] = None) -> int:
     )
     validate.add_argument("--model", required=True, help="Path to model (pickle).")
     validate.add_argument("--data", required=True, help="Path to validation CSV.")
-    validate.add_argument("--target", default="target", help="Name of the target column.")
-    validate.add_argument("--output", default=None, help="Write JUnit XML to this path.")
+    validate.add_argument(
+        "--target", default="target", help="Name of the target column."
+    )
+    validate.add_argument(
+        "--output", default=None, help="Write JUnit XML to this path."
+    )
     validate.add_argument(
         "--train-data", default=None, help="Optional training CSV (for drift tests)."
     )

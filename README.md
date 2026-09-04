@@ -43,6 +43,21 @@ Extras:
 - `--train-data` enables the drift tests (they compare train vs. validation distributions).
 - Exit code is `1` if any test fails, `0` otherwise.
 
+## Prediction caching
+
+Within a single `suite.run(...)`, predictions are computed once and reused
+across every test. `TestContext.predict()` caches by a content hash of the
+input, so tests predicting on the *same* data (`MinimumAccuracyTest`,
+`GroupPerformanceTest`, the fairness tests, ...) each reuse the result instead
+of re-running the model. Perturbed inputs (e.g. the robustness test's noisy
+copy) get their own cache entry, so caching never compromises correctness.
+
+Disable it if you need a fresh prediction every call:
+
+```python
+ctx = TestContext(model=model, X_val=X_val, y_val=y_val, cache_predictions=False)
+```
+
 ## YAML suites
 
 Define your contract declaratively — no code needed:
@@ -67,6 +82,19 @@ suite:
       params: {expected_columns: [age, income], max_null_ratio: 0.02}
 ```
 
+## Multi-framework support
+
+`TestContext` talks to models through a small adapter interface
+(`modeltest.wrappers`). Out of the box it normalizes:
+
+- **scikit-learn** estimators(`predict`, and `predict_proba` when available)
+- **PyTorch** `nn.Module` (`predict` = argmax over logits, `predict_proba` = softmax)
+- **Keras / TensorFlow** models (binary threshold or multiclass argmax)
+
+Pass any of these straight to `suite.run(model, ...)`; the right adapter is
+picked automatically. Custom framework? Implement a
+`ModelWrapper` subclass and pass an instance as the model.
+
 ## Built-in test types
 
 | `type` (YAML) | Class | Checks |
@@ -80,6 +108,22 @@ suite:
 | `ks` | `KSTest` | KS p-value per column |
 | `equal_opportunity` | `EqualOpportunityTest` | Balanced TPR across protected groups |
 | `statistical_parity` | `StatisticalParityTest` | Balanced selection rate (+ 4/5ths rule) |
+
+## Development
+
+Install dev tools and run the quality gates:
+
+```bash
+make install          # pip install -e ".[dev]"
+make lint             # ruff check
+make format           # ruff format
+make test             # pytest (with 80% coverage gate)
+make precommit        # install git pre-commit hooks (lint+format)
+```
+
+Continuous integration mirrors these gates: `lint`, `test-library` (with
+coverage) and `validate-model` all run on every push / PR
+([.github/workflows/validate.yml](.github/workflows/validate.yml)).
 
 ## CI/CD
 

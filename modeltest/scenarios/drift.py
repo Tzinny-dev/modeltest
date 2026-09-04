@@ -4,12 +4,13 @@ These tests compare the *data* distributions (not the model), so they don't
 need the model to make predictions — only the two datasets. That is why
 ``test`` reads from ``ctx.X_train`` / ``ctx.X_val`` rather than using the model.
 """
+
 from __future__ import annotations
 
 from typing import Any, List, Optional
 
 from modeltest.core.base import ModelTest, TestContext
-from modeltest.scenarios._utils import ks_statistic, psi
+from modeltest.scenarios._utils import psi
 
 
 class DataDriftTest(ModelTest):
