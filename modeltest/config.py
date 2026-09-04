@@ -23,6 +23,10 @@ The YAML format mirrors the built-in scenarios with a ``type`` and ``params``:
           params: {protected_col: "gender", max_diff: 0.1}
         - type: statistical_parity
           params: {protected_col: "gender", max_diff: 0.1, min_ratio: 0.8}
+        - type: feature_dominance
+          params: {max_top_share: 0.9}
+        - type: top_features
+          params: {expected_features: [income, age], k: 2}
         - type: data_invariant
           params: {expected_columns: [age, income], max_null_ratio: 0.02}
 """
@@ -36,12 +40,14 @@ from modeltest.scenarios import (  # type: ignore[attr-defined]
     DataDriftTest,
     DataInvariantTest,
     EqualOpportunityTest,
+    FeatureDominanceTest,
     GroupPerformanceTest,
     KSTest,
     MinimumAccuracyTest,
     NoNullTest,
     RobustnessTest,
     StatisticalParityTest,
+    TopFeaturesTest,
 )
 
 # Map YAML `type` strings to the scenario class used to build each test.
@@ -55,6 +61,8 @@ _REGISTRY = {
     "ks": KSTest,
     "equal_opportunity": EqualOpportunityTest,
     "statistical_parity": StatisticalParityTest,
+    "feature_dominance": FeatureDominanceTest,
+    "top_features": TopFeaturesTest,
 }
 
 

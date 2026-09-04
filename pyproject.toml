@@ -26,7 +26,9 @@ dev = [
     "pytest-cov",
     "ruff",
     "pre-commit",
+    "shap",
 ]
+explain = ["shap"]
 
 [project.scripts]
 modeltest = "modeltest.cli:main"

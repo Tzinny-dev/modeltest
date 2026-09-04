@@ -108,6 +108,12 @@ picked automatically. Custom framework? Implement a
 | `ks` | `KSTest` | KS p-value per column |
 | `equal_opportunity` | `EqualOpportunityTest` | Balanced TPR across protected groups |
 | `statistical_parity` | `StatisticalParityTest` | Balanced selection rate (+ 4/5ths rule) |
+| `feature_dominance` | `FeatureDominanceTest` | No single feature dominates attribution |
+| `top_features` | `TopFeaturesTest` | Top-K attributed features are expected |
+
+> Explainability tests use SHAP. Install with `pip install modeltest[explain]`
+> (or `modeltest`'s `explain` extra). You can also pass your own explainer
+> callable to any explainability test.
 
 ## Development
 

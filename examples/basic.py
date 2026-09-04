@@ -8,6 +8,7 @@ from modeltest import ModelSuite
 from modeltest.scenarios import (
     DataDriftTest,
     EqualOpportunityTest,
+    FeatureDominanceTest,
     GroupPerformanceTest,
     MinimumAccuracyTest,
     RobustnessTest,
@@ -44,6 +45,7 @@ suite.add_tests(
     DataDriftTest(feature_cols=["age", "income"], max_psi=0.1),
     EqualOpportunityTest(protected_col="_gender", max_diff=0.1),
     StatisticalParityTest(protected_col="_gender", max_diff=0.1, min_ratio=0.8),
+    FeatureDominanceTest(max_top_share=0.9),
 )
 
 result = suite.run(
