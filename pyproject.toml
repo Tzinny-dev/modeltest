@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=61"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -8,9 +8,24 @@ version = "0.2.0"
 description = "If you test your code, why not your model? Unit tests for machine learning models."
 readme = "README.md"
 requires-python = ">=3.9"
-license = {text = "MIT"}
+license = "MIT"
+license-files = ["LICENSE"]
 authors = [{name = "modeltest contributors"}]
 keywords = ["machine-learning", "mlops", "testing", "validation", "ci"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Quality Assurance",
+    "Topic :: Software Development :: Testing",
+]
 
 dependencies = [
     "numpy",
@@ -34,6 +49,11 @@ mlflow = ["mlflow"]
 
 [project.scripts]
 modeltest = "modeltest.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/Tzinny-dev/model-test"
+Repository = "https://github.com/Tzinny-dev/model-test"
+Issues = "https://github.com/Tzinny-dev/model-test/issues"
 
 [tool.setuptools.packages.find]
 include = ["modeltest*"]

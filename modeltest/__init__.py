@@ -8,6 +8,13 @@ from modeltest.core.base import (
 )
 from modeltest.core.runner import run_suite, run_test
 
+try:
+    from importlib.metadata import version as _metadata_version
+
+    __version__ = _metadata_version("modeltest")
+except Exception:  # noqa: BLE001 - not installed via pip
+    __version__ = "unknown"
+
 __all__ = [
     "ModelTest",
     "ModelSuite",
