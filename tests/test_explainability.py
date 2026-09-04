@@ -2,6 +2,7 @@
 
 import numpy as np
 import pandas as pd
+import pytest
 from sklearn.ensemble import RandomForestClassifier
 
 from modeltest import TestContext
@@ -38,6 +39,44 @@ class TestMeanAbsAttribution:
         values = [np.zeros((1, 2)), np.array([[2.0, 4.0]])]
         attr = _mean_abs_attribution(values, X)
         assert attr == {"a": 2.0, "b": 4.0}
+
+    def test_3d_array_takes_class1(self):
+        X = pd.DataFrame({"a": [1, 2], "b": [3, 4]})
+        # (n_samples, n_features, n_classes)
+        values = np.array(
+            [
+                [[0.0, 1.0], [0.0, 2.0]],
+                [[0.0, 3.0], [0.0, 4.0]],
+            ]
+        )
+        attr = _mean_abs_attribution(values, X)
+        # class 1 values: [[1,2],[3,4]] → mean per feature: [2.0, 3.0]
+        assert attr["a"] == pytest.approx(2.0)
+        assert attr["b"] == pytest.approx(3.0)
+
+    def test_single_class_3d_takes_class0(self):
+        X = pd.DataFrame({"a": [1, 2], "b": [3, 4]})
+        values = np.array(
+            [
+                [[5.0], [6.0]],
+                [[7.0], [8.0]],
+            ]
+        )
+        attr = _mean_abs_attribution(values, X)
+        assert attr["a"] == pytest.approx(6.0)
+        assert attr["b"] == pytest.approx(7.0)
+
+    def test_uses_feature_names_when_no_columns(self):
+        X = np.array([[1, 2], [3, 4]])
+        values = np.array([[10.0, 20.0]])
+        attr = _mean_abs_attribution(values, X, feature_names=["x", "y"])
+        assert attr == {"x": 10.0, "y": 20.0}
+
+    def test_fallback_positional_names(self):
+        X = np.array([[1, 2], [3, 4]])
+        values = np.array([[10.0, 20.0]])
+        attr = _mean_abs_attribution(values, X)
+        assert attr == {"f0": 10.0, "f1": 20.0}
 
 
 class TestFeatureDominance:

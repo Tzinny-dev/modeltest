@@ -109,3 +109,47 @@ def test_missing_mlflow_raises(monkeypatch):
 
     with pytest.raises(MlflowNotInstalledError):
         mod._import_mlflow()
+
+
+def test_non_numeric_metrics_logged_as_params(tracking_uri):
+    from modeltest.core.base import SuiteResult, TestResult, TestStatus
+
+    result = SuiteResult(
+        suite_name="mixed",
+        results=[
+            TestResult(
+                name="mixed_test",
+                status=TestStatus.PASSED,
+                metrics={"accuracy": 0.95, "model_type": "random_forest"},
+            )
+        ],
+    )
+    with mlflow.start_run() as run:
+        log_suite_result(result)
+        run_id = run.info.run_id
+
+    run_data = mlflow.get_run(run_id).data
+    assert run_data.metrics["mixed_test.accuracy"] == 0.95
+    assert run_data.params["mixed_test.model_type"] == "random_forest"
+
+
+def test_no_artifacts_when_disabled(tracking_uri):
+    result = _suite_result()
+    with mlflow.start_run() as run:
+        log_suite_result(result, log_artifacts=False)
+        run_id = run.info.run_id
+    from mlflow.tracking import MlflowClient
+
+    client = MlflowClient()
+    artifacts = [a.path for a in client.list_artifacts(run_id)]
+    assert "modeltest-report.json" not in artifacts
+
+
+def test_param_and_metric_prefix(tracking_uri):
+    result = _suite_result()
+    with mlflow.start_run() as run:
+        log_suite_result(result, param_prefix="v2.", metric_prefix="prod.")
+        run_id = run.info.run_id
+    run_data = mlflow.get_run(run_id).data
+    assert "prod.num_passed" in run_data.metrics
+    assert "v2.MinimumAccuracyTest.status" in run_data.params

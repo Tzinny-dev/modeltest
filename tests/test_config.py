@@ -104,3 +104,40 @@ def test_dump_round_trip(tmp_path):
     assert isinstance(loaded.tests[0], MinimumAccuracyTest)
     assert isinstance(loaded.tests[1], RobustnessTest)
     assert loaded.tests[0].threshold == 0.9
+
+
+class TestConfigErrorPaths:
+    def test_missing_suite_mapping(self, tmp_path):
+        path = tmp_path / "no_suite.yaml"
+        path.write_text("not_suite: true\n")
+        with pytest.raises(ValueError, match="top-level"):
+            load_suite_yaml(str(path))
+
+    def test_test_entry_not_a_mapping(self, tmp_path):
+        path = tmp_path / "bad.yaml"
+        path.write_text('suite:\n  name: "x"\n  tests:\n    - "not_a_dict"\n')
+        with pytest.raises(ValueError, match="must be a mapping"):
+            load_suite_yaml(str(path))
+
+    def test_params_not_a_mapping(self, tmp_path):
+        path = tmp_path / "bad.yaml"
+        path.write_text(
+            'suite:\n  name: "x"\n  tests:\n    - type: minimum_accuracy\n'
+            '      params: "bad"\n'
+        )
+        with pytest.raises(ValueError, match="must be a mapping"):
+            load_suite_yaml(str(path))
+
+
+class TestImportAttr:
+    def test_not_a_modeltest_subclass(self):
+        from modeltest.config import _import_attr
+
+        with pytest.raises(TypeError, match="not a ModelTest subclass"):
+            _import_attr("collections", "OrderedDict")
+
+    def test_missing_attribute(self):
+        from modeltest.config import _import_attr
+
+        with pytest.raises(ValueError, match="has no attribute"):
+            _import_attr("modeltest.scenarios", "DoesNotExist")
