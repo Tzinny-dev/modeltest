@@ -1,0 +1,24 @@
+suite:
+  name: "Income CLI Demo"
+  tests:
+    - type: minimum_accuracy
+      params:
+        threshold: 0.7
+    - type: group_performance
+      params:
+        metric: accuracy
+        threshold: 0.6
+        group_col: "gender"
+    - type: robustness
+      params:
+        noise_std: 100
+        max_drop: 0.15
+        metric: accuracy
+    - type: data_drift
+      params:
+        features: ["age", "income"]
+        max_psi: 0.1
+    - type: data_invariant
+      params:
+        expected_columns: ["age", "income", "gender_male", "gender"]
+        max_null_ratio: 0.0

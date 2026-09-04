@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "modeltest"
+version = "0.1.0"
+description = "If you test your code, why not your model? Unit tests for machine learning models."
+readme = "README.md"
+requires-python = ">=3.9"
+license = {text = "MIT"}
+authors = [{name = "modeltest contributors"}]
+keywords = ["machine-learning", "mlops", "testing", "validation", "ci"]
+
+dependencies = [
+    "numpy",
+    "pandas",
+    "scikit-learn",
+    "scipy",
+    "PyYAML",
+]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[project.scripts]
+modeltest = "modeltest.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["modeltest*"]

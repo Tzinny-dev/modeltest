@@ -1,0 +1,131 @@
+"""Pytest suite for the core primitives."""
+import numpy as np
+import pandas as pd
+import pytest
+from sklearn.ensemble import RandomForestClassifier
+
+from modeltest import ModelSuite, ModelTest, TestContext
+from modeltest.core import base as _base
+
+TestStatus = _base.TestStatus
+from modeltest.core.report import to_junit_xml
+from modeltest.scenarios import (
+    GroupPerformanceTest,
+    MinimumAccuracyTest,
+    RobustnessTest,
+)
+
+
+def _make_data():
+    rng = np.random.default_rng(0)
+    n = 3000
+    gender = rng.choice(["M", "F"], n)
+    X = pd.DataFrame(
+        {
+            "age": rng.normal(45, 12, n),
+            "income": rng.normal(60000, 20000, n),
+            "gender_male": (gender == "M").astype(int),
+            "_gender": gender,
+        }
+    )
+    y = (X["income"] > X["age"] * 800 + rng.normal(0, 16000, n)).astype(int)
+    return X, y
+
+
+def _build_pass_model(X, y):
+    from sklearn.model_selection import train_test_split
+
+    feats = ["age", "income", "gender_male"]
+    X_train, X_val, y_train, y_val = train_test_split(
+        X, y, test_size=0.5, random_state=1
+    )
+    model = RandomForestClassifier(n_estimators=60, random_state=0).fit(
+        X_train[feats], y_train
+    )
+    return model, feats, X_val, y_val
+
+
+class TestMinimumAccuracy:
+    def test_passes_when_above_threshold(self):
+        X, y = _make_data()
+        model, feats, X_val, y_val = _build_pass_model(X, y)
+        result = MinimumAccuracyTest(threshold=0.0).run(
+            TestContext(model=model, X_val=X_val[feats], y_val=y_val)
+        )
+        assert result.passed
+
+    def test_fails_when_below_threshold(self):
+        X, y = _make_data()
+        model, feats, X_val, y_val = _build_pass_model(X, y)
+        result = MinimumAccuracyTest(threshold=0.99).run(
+            TestContext(model=model, X_val=X_val[feats], y_val=y_val)
+        )
+        assert result.status == TestStatus.FAILED
+
+
+class TestGroupPerformance:
+    def test_passes_for_fair_model(self):
+        X, y = _make_data()
+        model, feats, X_val, y_val = _build_pass_model(X, y)
+        result = GroupPerformanceTest(
+            metric="accuracy", threshold=0.0, group_col="_gender"
+        ).run(TestContext(model=model, X_val=X_val[feats + ["_gender"]], y_val=y_val))
+        assert result.passed
+
+    def test_ignores_non_model_columns_in_predict(self):
+        X, y = _make_data()
+        model, feats, X_val, y_val = _build_pass_model(X, y)
+        X_val["_extra"] = np.random.default_rng(0).normal(size=len(X_val))
+        result = GroupPerformanceTest(
+            metric="accuracy", threshold=0.0, group_col="_gender"
+        ).run(TestContext(model=model, X_val=X_val[feats + ["_gender", "_extra"]], y_val=y_val))
+        assert result.passed
+
+
+class TestRobustness:
+    def test_passes_small_noise(self):
+        X, y = _make_data()
+        model, feats, X_val, y_val = _build_pass_model(X, y)
+        result = RobustnessTest(
+            noise_std=10, max_drop=0.05, metric="accuracy"
+        ).run(TestContext(model=model, X_val=X_val[feats], y_val=y_val))
+        assert result.passed
+
+
+class TestSuite:
+    def test_aggregates_results(self):
+        X, y = _make_data()
+        model, feats, X_val, y_val = _build_pass_model(X, y)
+        suite = ModelSuite(name="t")
+        suite.add_tests(
+            MinimumAccuracyTest(threshold=0.0),
+            MinimumAccuracyTest(threshold=0.99),  # will fail
+        )
+        result = suite.run(model, X_val[feats], y_val)
+        assert result.num_passed == 1
+        assert result.num_failed == 1
+        assert not result.passed
+
+    def test_custom_test_subclass(self):
+        class AlwaysPass(ModelTest):
+            def test(self, ctx):
+                return True
+
+        X, y = _make_data()
+        model, feats, X_val, y_val = _build_pass_model(X, y)
+        suite = ModelSuite(name="t")
+        suite.add_test(AlwaysPass())
+        assert suite.run(model, X_val[feats], y_val).passed
+
+
+class TestReport:
+    def test_junit_xml_is_well_formed(self):
+        X, y = _make_data()
+        model, feats, X_val, y_val = _build_pass_model(X, y)
+        suite = ModelSuite(name="fraud")
+        suite.add_test(MinimumAccuracyTest(threshold=0.0))
+        result = suite.run(model, X_val[feats], y_val)
+        xml = to_junit_xml(result)
+        assert "<testsuite" in xml
+        assert 'name="fraud"' in xml
+        assert "MinimumAccuracyTest" in xml

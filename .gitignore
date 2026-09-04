@@ -1,0 +1,13 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.pytest_cache/
+dist/
+build/
+
+# Generated example artifacts
+examples/model.pkl
+examples/train.csv
+examples/validation.csv
+reports/

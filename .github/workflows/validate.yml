@@ -1,0 +1,71 @@
+name: Model Validation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test-library:
+    name: Run unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install package + dev deps
+        run: |
+          pip install -e ".[dev]"
+          mkdir -p reports
+      - name: Run test suite
+        run: pytest tests/ --junitxml=reports/library.xml
+      - name: Publish library test report
+        uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: Library tests
+          path: reports/library.xml
+          reporter: jest-junit
+
+  validate-model:
+    name: Validate model contract
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install package
+        run: |
+          pip install . pyyaml scikit-learn joblib
+          mkdir -p reports
+
+      - name: Generate model artifacts
+        run: python examples/make_artifacts.py
+
+      - name: Run model validation
+        id: validation
+        run: |
+          modeltest validate \
+            --suite examples/suite.yaml \
+            --model examples/model.pkl \
+            --data examples/validation.csv \
+            --target target \
+            --train-data examples/train.csv \
+            --output reports/model-validation.xml
+        continue-on-error: true
+
+      - name: Publish model validation report
+        uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          name: Model validation
+          path: reports/model-validation.xml
+          reporter: junit
+
+      - name: Fail if model didn't pass
+        if: steps.validation.outcome != 'success'
+        run: |
+          echo "::error::Model validation failed. Check the report."
+          exit 1
