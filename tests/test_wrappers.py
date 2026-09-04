@@ -2,6 +2,7 @@
 
 import numpy as np
 import pandas as pd
+import pytest
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 
@@ -11,6 +12,7 @@ from modeltest.wrappers import (
     KerasModel,
     ModelWrapper,
     SklearnClassifier,
+    SklearnModel,
     TorchModel,
     wrap,
 )
@@ -110,6 +112,30 @@ class TestTorchWrapper:
         assert proba.shape == (2, 2)
         np.testing.assert_allclose(proba.sum(axis=1), 1.0, atol=1e-5)
 
+    def test_no_torch_available_fallback(self):
+        # Without torch installed, _forward passes ndarray straight to the model.
+        weights = np.array([[1.0, -1.0], [-1.0, 1.0]])
+        m = _FakeTorchModule(weights)
+        a = TorchModel(m)
+        X = np.array([[1.0, -1.0]])
+        pred = a.predict(X)
+        assert pred[0] == 0
+
+    def test_predict_proba_1d_input_reshaped(self):
+        # Trigger the data[:, None] path via a single-row input squeezed to 1D.
+        m = _FakeTorchModule(np.array([[1.0, -1.0], [-1.0, 1.0]]))
+        a = TorchModel(m)
+        proba = a.predict_proba(np.array([[1.0, -1.0]]))
+        assert proba.shape == (1, 2)
+
+    def test_eval_called_when_training(self):
+        weights = np.array([[1.0, -1.0], [-1.0, 1.0]])
+        m = _FakeTorchModule(weights)
+        m.training = True
+        a = TorchModel(m)
+        a.predict(np.array([[1.0, -1.0]]))
+        assert m.training is False
+
 
 class _FakeKerasModel:
     """Minimal stand-in mimicking a compiled Keras model."""
@@ -146,3 +172,43 @@ class TestFallbackDispatch:
         w = wrap(Generic())
         assert isinstance(w, ModelWrapper)
         assert w.predict(np.zeros(5)).shape == (5,)
+
+
+class TestModelWrapperBase:
+    def test_predict_raises_not_implemented(self):
+        class Bare(ModelWrapper):
+            pass
+
+        with pytest.raises(NotImplementedError):
+            Bare(None).predict(np.zeros(3))
+
+    def test_predict_proba_raises_not_implemented(self):
+        class Bare(ModelWrapper):
+            pass
+
+        with pytest.raises(NotImplementedError):
+            Bare(None).predict_proba(np.zeros(3))
+
+    def test_sklearn_model_without_proba_returns_none(self):
+        class Regressor:
+            def predict(self, X):
+                return np.zeros(len(X))
+
+        w = SklearnModel(Regressor())
+        assert w.predict_proba(np.zeros(3)) is None
+
+    def test_feature_names_in_exposed(self):
+        class WithNames:
+            feature_names_in_ = ["a", "b"]
+
+        w = wrap(WithNames())
+        # WithNames is not a BaseEstimator, so it falls to generic SklearnModel
+        assert w.feature_names_in_ == ["a", "b"]
+
+    def test_feature_names_none_when_absent(self):
+        class NoNames:
+            def predict(self, X):
+                return np.zeros(len(X))
+
+        w = wrap(NoNames())
+        assert w.feature_names_in_ is None
