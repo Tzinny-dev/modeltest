@@ -95,6 +95,12 @@ Pass any of these straight to `suite.run(model, ...)`; the right adapter is
 picked automatically. Custom framework? Implement a
 `ModelWrapper` subclass and pass an instance as the model.
 
+**scikit-learn `Pipeline`s** (feature engineering + model) work out of the box:
+the suite predicts through the whole pipeline, `model_features` filters
+validation data to the pipeline's raw input columns, and the SHAP-based
+explainability tests explain the final estimator against the engineered
+features (e.g. `num__age`, `cat__cat_a`).
+
 ## Built-in test types
 
 | `type` (YAML) | Class | Checks |

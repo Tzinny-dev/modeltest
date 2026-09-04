@@ -16,7 +16,9 @@ from modeltest.core.base import ModelTest, TestContext
 from modeltest.scenarios._utils import model_features
 
 Explainer = Callable[[Any, Any], Any]
-"""Signature: explainer(model, X) -> object exposing .values (n_samples, n_features)."""
+"""Signature: explainer(model, X) -> array of shape (n_samples, n_features) or
+``(array, feature_names)``. Returning a tuple lets the explainer report the
+exact feature columns the attribution refers to."""
 
 
 def _default_shap_explainer(model: Any, X: Any) -> Any:
@@ -24,6 +26,27 @@ def _default_shap_explainer(model: Any, X: Any) -> Any:
     import shap
 
     base = getattr(model, "model", model)  # unwrap our ModelWrapper
+
+    # scikit-learn Pipelines: SHAP would write read-only feature_names_in_, so
+    # explain the *final* estimator over the *engineered* features instead.
+    try:
+        from sklearn.pipeline import Pipeline
+
+        if isinstance(base, Pipeline):
+            transformer = base[:-1]
+            estimator = base.steps[-1][1]
+            Xt = transformer.transform(X)
+            try:
+                names = list(transformer.get_feature_names_out())
+            except Exception:  # noqa: BLE001 - fall back to positional names
+                names = None
+            explainer = shap.TreeExplainer(
+                estimator, feature_perturbation="tree_path_dependent"
+            )
+            return explainer.shap_values(Xt, check_additivity=False), names
+    except ImportError:
+        pass
+
     if hasattr(base, "predict_proba") or hasattr(base, "predict"):
         try:
             # TreeExplainer works for tree ensembles and logistic regression.
@@ -36,19 +59,29 @@ def _default_shap_explainer(model: Any, X: Any) -> Any:
     return explainer.shap_values(X)
 
 
-def _mean_abs_attribution(values: Any, X: Any) -> "dict[str, float]":
+def _mean_abs_attribution(
+    values: Any, X: Any, feature_names: Any = None
+) -> "dict[str, float]":
     """Mean absolute SHAP value per feature column."""
-    arr = np.asarray(values)
-    # For classifiers SHAP may return a list (one matrix per class).
-    if arr.ndim == 3:
-        arr = arr[1] if arr.shape[0] > 1 else arr[0]
+    if isinstance(values, (list, tuple)):
+        # Legacy per-class list: shape (n_classes, n_samples, n_features).
+        arr = np.asarray(values)
+        arr = np.atleast_2d(arr)
+        if arr.ndim == 3:
+            arr = arr[1] if arr.shape[0] > 1 else arr[0]
+    else:
+        arr = np.asarray(values)
+        if arr.ndim == 3:
+            # ndarray layout (n_samples, n_features, n_classes): take class 1.
+            arr = arr[..., 1] if arr.shape[-1] > 1 else arr[..., 0]
     arr = np.atleast_2d(arr)
     means = np.abs(arr).mean(axis=0)
-    cols = (
-        list(X.columns)
-        if hasattr(X, "columns")
-        else [f"f{i}" for i in range(arr.shape[1])]
-    )
+    if feature_names is not None:
+        cols = list(feature_names)
+    elif hasattr(X, "columns"):
+        cols = list(X.columns)
+    else:
+        cols = [f"f{i}" for i in range(arr.shape[1])]
     return dict(zip(cols, map(float, means)))
 
 
@@ -70,8 +103,11 @@ class FeatureDominanceTest(ModelTest):
 
     def test(self, ctx: TestContext) -> Any:
         X = model_features(ctx._wrapped(), ctx.X_val)
-        values = self.explainer(ctx._wrapped(), X)
-        attr = _mean_abs_attribution(values, X)
+        out = self.explainer(ctx._wrapped(), X)
+        names = None
+        if isinstance(out, tuple):
+            out, names = out
+        attr = _mean_abs_attribution(out, X, names)
         total = sum(attr.values())
         if total <= 0:
             raise AssertionError("All SHAP attributions are zero; model is degenerate")
@@ -102,8 +138,11 @@ class TopFeaturesTest(ModelTest):
 
     def test(self, ctx: TestContext) -> Any:
         X = model_features(ctx._wrapped(), ctx.X_val)
-        values = self.explainer(ctx._wrapped(), X)
-        attr = _mean_abs_attribution(values, X)
+        out = self.explainer(ctx._wrapped(), X)
+        names = None
+        if isinstance(out, tuple):
+            out, names = out
+        attr = _mean_abs_attribution(out, X, names)
         ranked = sorted(attr, key=attr.get, reverse=True)[: self.k]
         unexpected = [f for f in ranked if f not in self.expected_features]
         assert not unexpected, (
