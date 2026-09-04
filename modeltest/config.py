@@ -27,6 +27,8 @@ The YAML format mirrors the built-in scenarios with a ``type`` and ``params``:
           params: {max_top_share: 0.9}
         - type: top_features
           params: {expected_features: [income, age], k: 2}
+        - type: confidence_threshold
+          params: {metric: accuracy, threshold: 0.85, n_boot: 1000, alpha: 0.05}
         - type: data_invariant
           params: {expected_columns: [age, income], max_null_ratio: 0.02}
 """
@@ -37,6 +39,7 @@ import yaml
 
 from modeltest.core.base import ModelSuite
 from modeltest.scenarios import (  # type: ignore[attr-defined]
+    ConfidenceThresholdTest,
     DataDriftTest,
     DataInvariantTest,
     EqualOpportunityTest,
@@ -63,6 +66,7 @@ _REGISTRY = {
     "statistical_parity": StatisticalParityTest,
     "feature_dominance": FeatureDominanceTest,
     "top_features": TopFeaturesTest,
+    "confidence_threshold": ConfidenceThresholdTest,
 }
 
 

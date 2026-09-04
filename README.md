@@ -101,6 +101,7 @@ picked automatically. Custom framework? Implement a
 |---------------|-------|--------|
 | `minimum_accuracy` | `MinimumAccuracyTest` | Global metric above threshold |
 | `group_performance` | `GroupPerformanceTest` | Metric above threshold per subgroup |
+| `confidence_threshold` | `ConfidenceThresholdTest` | Metric floor via bootstrap CI (lower/upper bound) |
 | `robustness` | `RobustnessTest` | Performance under feature noise |
 | `data_invariant` | `DataInvariantTest` | Expected columns / null ratios |
 | `no_null` | `NoNullTest` | No missing values |

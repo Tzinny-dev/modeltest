@@ -6,6 +6,7 @@ from sklearn.model_selection import train_test_split
 
 from modeltest import ModelSuite
 from modeltest.scenarios import (
+    ConfidenceThresholdTest,
     DataDriftTest,
     EqualOpportunityTest,
     FeatureDominanceTest,
@@ -46,6 +47,7 @@ suite.add_tests(
     EqualOpportunityTest(protected_col="_gender", max_diff=0.1),
     StatisticalParityTest(protected_col="_gender", max_diff=0.1, min_ratio=0.8),
     FeatureDominanceTest(max_top_share=0.9),
+    ConfidenceThresholdTest(metric="accuracy", threshold=0.85, n_boot=200),
 )
 
 result = suite.run(

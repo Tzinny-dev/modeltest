@@ -7,6 +7,7 @@ from typing import Any, Callable
 import numpy as np
 
 from modeltest.core.base import ModelTest, TestContext
+from modeltest.scenarios._utils import bootstrap_ci
 
 _METRICS = {
     "accuracy": lambda yt, yp: float(np.mean(np.asarray(yt) == np.asarray(yp))),
@@ -80,3 +81,67 @@ class GroupPerformanceTest(ModelTest):
             assert score >= self.threshold, (
                 f"group {g!r}: {self.metric} = {score:.4f} < threshold {self.threshold}"
             )
+
+
+class ConfidenceThresholdTest(ModelTest):
+    """Assert, with a confidence interval, that a metric exceeds a threshold.
+
+    Unlike a point-estimate comparison, this treats the validation metric as a
+    random quantity: bootstrap resampling yields a percentile interval, and the
+    test only passes when even the *lower* bound clears the threshold. This is
+    the correct way to gate on a small sample, where a single optimistic
+    number can look fine by luck.
+
+    ``bound`` selects which side of the interval is compared:
+
+    * ``"lower"`` (default) — passes when ``lower >= threshold``; stringent,
+      used to be confident a floor is met.
+    * ``"upper"`` — passes when ``upper <= threshold``; for caps (e.g. latency,
+      error rate ceilings).
+    """
+
+    def __init__(
+        self,
+        metric: str = "accuracy",
+        threshold: float = 0.85,
+        n_boot: int = 1000,
+        alpha: float = 0.05,
+        bound: str = "lower",
+        random_state: int = 0,
+    ):
+        self.metric = metric
+        self.threshold = threshold
+        self.n_boot = n_boot
+        self.alpha = alpha
+        self.bound = bound
+        self.random_state = random_state
+
+    def test(self, ctx: TestContext) -> Any:
+        fn = resolve_metric(self.metric)
+        y_true = np.asarray(ctx.y_val)
+        y_pred = np.asarray(ctx.predict())
+        estimate, lower, upper = bootstrap_ci(
+            y_true,
+            y_pred,
+            fn,
+            n_boot=self.n_boot,
+            alpha=self.alpha,
+            random_state=self.random_state,
+        )
+
+        if self.bound == "lower":
+            passed = lower >= self.threshold
+            message = "lower CI bound"
+        elif self.bound == "upper":
+            passed = upper <= self.threshold
+            message = "upper CI bound"
+        else:
+            raise ValueError(f"bound must be 'lower' or 'upper', got {self.bound!r}")
+
+        comparison = ">=" if self.bound == "lower" else "<="
+        detail = (
+            f"{self.metric}: est={estimate:.4f} "
+            f"CI=[{lower:.4f}, {upper:.4f}] ({1 - self.alpha:.0%}); "
+            f"{message} {comparison} threshold {self.threshold}"
+        )
+        assert passed, detail

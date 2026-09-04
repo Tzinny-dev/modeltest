@@ -2,11 +2,47 @@
 
 from __future__ import annotations
 
-from typing import Any
+from typing import Any, Callable
 
 import numpy as np
 
 _EPS = 1e-6
+
+
+def bootstrap_ci(
+    y_true: Any,
+    y_pred: Any,
+    metric_fn: Callable[[Any, Any], float],
+    n_boot: int = 1000,
+    alpha: float = 0.05,
+    random_state: int = 0,
+) -> "tuple[float, float, float]":
+    """Bootstrap estimate and percentile confidence interval for a metric.
+
+    Draws ``n_boot`` resamples (with replacement) of the data, computes the
+    metric on each, and returns ``(estimate, lower, upper)`` where the interval
+    covers ``1 - alpha`` of the bootstrap distribution. Useful for small
+    validation sets where a point estimate alone is unreliable — e.g. assert
+    ``lower >= threshold`` to be ``(1 - alpha)`` confident the metric is above
+    a floor.
+    """
+    y_true = np.asarray(y_true)
+    y_pred = np.asarray(y_pred)
+    n = y_true.shape[0]
+    if n == 0:
+        raise ValueError("Cannot bootstrap an empty sample")
+
+    rng = np.random.default_rng(random_state)
+    scores = np.empty(n_boot)
+    idx = np.arange(n)
+    for i in range(n_boot):
+        sample = rng.choice(idx, size=n, replace=True)
+        scores[i] = metric_fn(y_true[sample], y_pred[sample])
+
+    estimate = metric_fn(y_true, y_pred)
+    q = 100 * alpha / 2
+    lower, upper = np.percentile(scores, [q, 100 - q])
+    return float(estimate), float(lower), float(upper)
 
 
 def model_features(model: Any, X: Any) -> Any:
