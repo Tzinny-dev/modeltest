@@ -63,6 +63,7 @@ def to_junit_xml(result: SuiteResult) -> str:
     timestamp = datetime.now(timezone.utc).isoformat(timespec="seconds")
 
     xml = ['<?xml version="1.0" encoding="UTF-8"?>']
+    xml.append("<testsuites>")
     xml.append(
         f'<testsuite name="{_esc(result.suite_name)}" tests="{total}" '
         f'failures="{failures}" errors="{errors}" skipped="0" '
@@ -80,6 +81,7 @@ def to_junit_xml(result: SuiteResult) -> str:
             xml.append(f'    <error message="{_esc(r.detail)}" />')
         xml.append("  </testcase>")
     xml.append("</testsuite>")
+    xml.append("</testsuites>")
     return "\n".join(xml)
 
 
