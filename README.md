@@ -2,6 +2,10 @@
 
 > If you test your code, why not your model?
 
+[![PyPI version](https://img.shields.io/pypi/v/modeltest.svg)](https://pypi.org/project/modeltest/)
+[![Python](https://img.shields.io/pypi/pyversions/modeltest.svg)](https://pypi.org/project/modeltest/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 `modeltest` is a unit-testing framework for machine learning models. It lets you
 define contracts for model quality, robustness, fairness, and data invariants,
 and run them automatically in your CI/CD pipeline — just like `pytest` for code.
@@ -187,8 +191,9 @@ make test             # pytest (with 80% coverage gate)
 make precommit        # install git pre-commit hooks (lint+format)
 ```
 
-Continuous integration mirrors these gates: `lint`, `test-library` (with
-coverage) and `validate-model` all run on every push / PR
+Continuous integration mirrors these gates: `lint`, `dist-check` (build +
+`twine check`), `test-library` (with coverage) and `validate-model` all run
+on every push / PR
 ([.github/workflows/validate.yml](.github/workflows/validate.yml)).
 
 ## CI/CD
