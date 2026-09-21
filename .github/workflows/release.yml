@@ -63,7 +63,7 @@ jobs:
         run: |
           VERSION="${GITHUB_REF_NAME#v}"
           awk -v ver="$VERSION" '
-            $0 == "## [" ver "]" {flag=1; next}
+            index($0, "## [" ver "]") == 1 {flag=1; next}
             /^## \[/ {flag=0}
             flag
           ' CHANGELOG.md > body.md
