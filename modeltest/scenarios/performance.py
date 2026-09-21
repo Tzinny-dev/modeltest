@@ -29,6 +29,18 @@ def _sk_metric(name: str) -> Callable:
 
 
 def resolve_metric(metric: str) -> Callable[[Any, Any], float]:
+    """Resolve a metric name to a ``(y_true, y_pred) -> float`` callable.
+
+    Args:
+        metric: One of ``accuracy``, ``precision``, ``recall``, ``f1`` or
+            ``roc_auc`` (case-insensitive).
+
+    Returns:
+        The scoring callable.
+
+    Raises:
+        ValueError: If the metric name is unknown.
+    """
     name = metric.lower()
     if name in _METRICS:
         fn = _METRICS[name]
@@ -42,10 +54,17 @@ class MinimumAccuracyTest(ModelTest):
     """Assert overall accuracy is at least a threshold."""
 
     def __init__(self, threshold: float = 0.85, metric: str = "accuracy"):
+        """Configure the global quality floor.
+
+        Args:
+            threshold: Minimum acceptable metric value.
+            metric: Metric to evaluate (see ``resolve_metric``).
+        """
         self.threshold = threshold
         self.metric = metric
 
     def test(self, ctx: TestContext) -> Any:
+        """Score the whole validation set and assert the floor holds."""
         fn = resolve_metric(self.metric)
         score = fn(ctx.y_val, ctx.predict())
         assert score >= self.threshold, (
@@ -66,11 +85,22 @@ class GroupPerformanceTest(ModelTest):
         threshold: float = 0.8,
         group_col: str = "gender",
     ):
+        """Configure the per-subgroup quality floor.
+
+        Args:
+            metric: Metric evaluated per group.
+            threshold: Minimum acceptable value for *every* group.
+            group_col: Categorical column in ``X_val`` defining subgroups.
+        """
         self.metric = metric
         self.threshold = threshold
         self.group_col = group_col
 
     def test(self, ctx: TestContext) -> Any:
+        """Score each subgroup and assert all meet the threshold.
+
+        Fails on the first offending group, naming it and its score.
+        """
         fn = resolve_metric(self.metric)
         y_pred = np.asarray(ctx.predict())
         y_true = np.asarray(ctx.y_val)
@@ -109,6 +139,18 @@ class ConfidenceThresholdTest(ModelTest):
         bound: str = "lower",
         random_state: int = 0,
     ):
+        """Configure the bootstrap confidence check.
+
+        Args:
+            metric: Metric to bound.
+            threshold: Value the selected bound must clear.
+            n_boot: Number of bootstrap resamples.
+            alpha: Interval level (``1 - alpha`` confidence).
+            bound: ``"lower"`` to gate a floor (pass when
+                ``lower >= threshold``) or ``"upper"`` to gate a cap (pass
+                when ``upper <= threshold``).
+            random_state: Seed for reproducible intervals.
+        """
         self.metric = metric
         self.threshold = threshold
         self.n_boot = n_boot
@@ -117,6 +159,8 @@ class ConfidenceThresholdTest(ModelTest):
         self.random_state = random_state
 
     def test(self, ctx: TestContext) -> Any:
+        """Bootstrap the metric and assert the selected bound clears
+        ``threshold``. Raises ``ValueError`` for an unknown ``bound``."""
         fn = resolve_metric(self.metric)
         y_true = np.asarray(ctx.y_val)
         y_pred = np.asarray(ctx.predict())

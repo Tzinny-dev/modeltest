@@ -28,11 +28,26 @@ class DataDriftTest(ModelTest):
         max_psi: float = 0.25,
         n_bins: int = 10,
     ):
+        """Configure the PSI drift check.
+
+        Args:
+            feature_cols: Columns to check; ``None`` checks all numeric
+                columns of ``X_train``.
+            max_psi: Maximum tolerated PSI per column.
+            n_bins: Quantile bins used to discretize each column.
+        """
         self.feature_cols = feature_cols
         self.max_psi = max_psi
         self.n_bins = n_bins
 
     def test(self, ctx: TestContext) -> Any:
+        """Compare train vs. validation PSI per column.
+
+        Raises:
+            ValueError: If the context has no ``X_train``.
+            AssertionError: If a column is missing from ``X_val`` or any
+                PSI exceeds ``max_psi``.
+        """
         if ctx.X_train is None:
             raise ValueError("DataDriftTest requires X_train in the context")
 
@@ -58,10 +73,24 @@ class KSTest(ModelTest):
         feature_cols: Optional[List[str]] = None,
         min_p_value: float = 0.05,
     ):
+        """Configure the KS drift check.
+
+        Args:
+            feature_cols: Columns to check; ``None`` checks all numeric
+                columns of ``X_train``.
+            min_p_value: Minimum tolerated KS p-value per column.
+        """
         self.feature_cols = feature_cols
         self.min_p_value = min_p_value
 
     def test(self, ctx: TestContext) -> Any:
+        """Run the two-sample KS test per column against the context data.
+
+        Raises:
+            ValueError: If the context has no ``X_train``.
+            AssertionError: If a column is missing from ``X_val`` or any
+                p-value falls below ``min_p_value``.
+        """
         if ctx.X_train is None:
             raise ValueError("KSTest requires X_train in the context")
 

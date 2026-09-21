@@ -10,6 +10,15 @@ from modeltest.core.base import ModelSuite
 
 
 def main(argv: Optional[list] = None) -> int:
+    """Entry point for the ``modeltest`` console script.
+
+    Args:
+        argv: Command-line arguments (defaults to ``sys.argv[1:]``).
+
+    Returns:
+        Process exit code: ``0`` when the validated suite passes, ``1``
+        when any test fails.
+    """
     parser = argparse.ArgumentParser(
         prog="modeltest", description="Unit tests for machine learning models."
     )

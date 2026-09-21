@@ -28,11 +28,22 @@ class EqualOpportunityTest(ModelTest):
         max_diff: float = 0.1,
         pos_label: int = 1,
     ):
+        """Configure the equal-opportunity fairness check.
+
+        Args:
+            protected_col: Categorical column in ``X_val`` defining the
+                protected groups.
+            max_diff: Maximum tolerated gap between the best and worst
+                group TPR.
+            pos_label: Which class counts as positive.
+        """
         self.protected_col = protected_col
         self.max_diff = max_diff
         self.pos_label = pos_label
 
     def test(self, ctx: TestContext) -> Any:
+        """Compute per-group TPRs and assert the gap stays within
+        ``max_diff``. The failure detail lists every group's TPR."""
         y_pred = np.asarray(ctx.predict())
         rates = group_rates(ctx.y_val, y_pred, ctx.X_val[self.protected_col])
         tprs = {g: r["tpr"] for g, r in rates.items()}
@@ -59,12 +70,24 @@ class StatisticalParityTest(ModelTest):
         min_ratio: float = 0.8,
         pos_label: int = 1,
     ):
+        """Configure the statistical-parity fairness check.
+
+        Args:
+            protected_col: Categorical column in ``X_val`` defining the
+                protected groups.
+            max_diff: Maximum tolerated difference in selection rates.
+            min_ratio: Minimum tolerated ratio between the least and most
+                selected group (``0.8`` implements the 4/5ths rule).
+            pos_label: Which prediction value counts as selected.
+        """
         self.protected_col = protected_col
         self.max_diff = max_diff
         self.min_ratio = min_ratio
         self.pos_label = pos_label
 
     def test(self, ctx: TestContext) -> Any:
+        """Compute per-group selection rates and assert both the parity
+        difference and the disparate-impact ratio stay within bounds."""
         y_pred = np.asarray(ctx.predict())
         rates = group_rates(ctx.y_val, y_pred, ctx.X_val[self.protected_col])
         sel = {g: r["selection_rate"] for g, r in rates.items()}

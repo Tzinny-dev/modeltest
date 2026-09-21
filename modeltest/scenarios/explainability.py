@@ -98,10 +98,25 @@ class FeatureDominanceTest(ModelTest):
         explainer: Optional[Explainer] = None,
         max_top_share: float = 0.9,
     ):
+        """Configure the single-feature dominance check.
+
+        Args:
+            explainer: Custom explainer callable; ``None`` uses the
+                default SHAP backend.
+            max_top_share: Maximum share of total absolute attribution
+                allowed for the single top feature.
+        """
         self.explainer = explainer or _default_shap_explainer
         self.max_top_share = max_top_share
 
     def test(self, ctx: TestContext) -> Any:
+        """Compute mean absolute attributions and assert the top feature's
+        share stays within ``max_top_share``.
+
+        Raises:
+            AssertionError: If every attribution is zero (degenerate
+                model) or the top share exceeds the limit.
+        """
         X = model_features(ctx._wrapped(), ctx.X_val)
         out = self.explainer(ctx._wrapped(), X)
         names = None
@@ -132,11 +147,27 @@ class TopFeaturesTest(ModelTest):
         k: int = 3,
         explainer: Optional[Explainer] = None,
     ):
+        """Configure the top-K attribution check.
+
+        Args:
+            expected_features: Feature set the team considers
+                plausible/desired.
+            k: How many top features to check.
+            explainer: Custom explainer callable; ``None`` uses the
+                default SHAP backend.
+        """
         self.expected_features = set(expected_features)
         self.k = k
         self.explainer = explainer or _default_shap_explainer
 
     def test(self, ctx: TestContext) -> Any:
+        """Rank features by mean absolute attribution and assert the top
+        ``k`` all fall within ``expected_features``.
+
+        Raises:
+            AssertionError: If any top-``k`` feature is unexpected (the
+                detail lists them with the full attributions).
+        """
         X = model_features(ctx._wrapped(), ctx.X_val)
         out = self.explainer(ctx._wrapped(), X)
         names = None

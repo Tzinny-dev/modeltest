@@ -23,12 +23,24 @@ class RobustnessTest(ModelTest):
         metric: str = "accuracy",
         seed: int = 42,
     ):
+        """Configure the noise-perturbation stability check.
+
+        Args:
+            noise_std: Std-dev of the Gaussian noise added to numeric
+                features (in feature units).
+            max_drop: Maximum allowed absolute metric drop
+                (``clean - noisy``).
+            metric: Metric compared clean vs. noisy.
+            seed: RNG seed — the perturbation is reproducible.
+        """
         self.noise_std = noise_std
         self.max_drop = max_drop
         self.metric = metric
         self.seed = seed
 
     def test(self, ctx: TestContext) -> Any:
+        """Predict on clean and noisy copies of the validation data and
+        assert the metric drop stays within ``max_drop``."""
         fn = resolve_metric(self.metric)
         X = ctx.X_val
         X_model = model_features(ctx.model, X)

@@ -30,14 +30,18 @@ class ModelWrapper:
     __test__ = False  # don't let pytest collect this as a test class
 
     def __init__(self, model: Any):
+        """Wrap ``model`` and expose the normalized interface."""
         self.model = model
         self._predict_fn: Optional[Callable] = None
         self._proba_fn: Optional[Callable] = None
 
     def predict(self, X: Any) -> np.ndarray:
+        """Return class labels for ``X``. Concrete adapters implement this."""
         raise NotImplementedError
 
     def predict_proba(self, X: Any) -> Optional[np.ndarray]:
+        """Return probability estimates for ``X``, or ``None`` when the
+        underlying model does not support them."""
         raise NotImplementedError
 
     @property
@@ -50,9 +54,12 @@ class SklearnModel(ModelWrapper):
     """Adapter for scikit-learn style estimators exposing ``predict``."""
 
     def predict(self, X: Any) -> np.ndarray:
+        """Delegate the prediction to the wrapped estimator."""
         return self.model.predict(X)
 
     def predict_proba(self, X: Any) -> Optional[np.ndarray]:
+        """Return the estimator's probabilities when available, else
+        ``None``."""
         if hasattr(self.model, "predict_proba"):
             return np.asarray(self.model.predict_proba(X))
         return None
@@ -62,6 +69,7 @@ class SklearnClassifier(SklearnModel):
     """Adapter for classifiers: labels + probabilities."""
 
     def predict_proba(self, X: Any) -> Optional[np.ndarray]:
+        """Return classifier probabilities (assumed available)."""
         return np.asarray(self.model.predict_proba(X))
 
 
@@ -73,6 +81,13 @@ class TorchModel(ModelWrapper):
     """
 
     def __init__(self, model: Any, *, input_key: str = "images", device: Any = None):
+        """Configure the torch adapter.
+
+        Args:
+            model: A ``torch.nn.Module`` classifier.
+            input_key: Reserved for models expecting dict inputs.
+            device: Optional device to move inputs to before forward.
+        """
         super().__init__(model)
         self.input_key = input_key
         self.device = device
@@ -108,6 +123,8 @@ class TorchModel(ModelWrapper):
         return self.model(X)
 
     def predict(self, X: Any) -> np.ndarray:
+        """Forward ``X`` (in inference mode) and return argmax class
+        indices."""
         out = self._forward(X)
         if hasattr(out, "detach"):
             data = out.detach().cpu().numpy()
@@ -116,6 +133,7 @@ class TorchModel(ModelWrapper):
         return np.asarray(data).argmax(axis=1).astype(int)
 
     def predict_proba(self, X: Any) -> Optional[np.ndarray]:
+        """Forward ``X`` and return softmax-normalized probabilities."""
         out = self._forward(X)
         data = out.detach().cpu().numpy() if hasattr(out, "detach") else np.asarray(out)
         data = np.asarray(data)
@@ -129,16 +147,26 @@ class KerasModel(ModelWrapper):
     """Adapter for a compiled Keras/TensorFlow model."""
 
     def __init__(self, model: Any, *, multiclass: bool = False):
+        """Configure the Keras adapter.
+
+        Args:
+            model: A compiled ``tf.keras.Model``.
+            multiclass: Force argmax decoding even when the model has two
+                outputs (default: threshold at 0.5 for single-output).
+        """
         super().__init__(model)
         self.multiclass = multiclass
 
     def predict(self, X: Any) -> np.ndarray:
+        """Return class labels: argmax for multiclass outputs, 0.5
+        threshold for single-output models."""
         proba = np.asarray(self.model.predict(X, verbose=0))
         if self.multiclass or proba.ndim == 2 and proba.shape[1] > 2:
             return proba.argmax(axis=1)
         return (proba > 0.5).astype(int).ravel()
 
     def predict_proba(self, X: Any) -> Optional[np.ndarray]:
+        """Return the model's raw output as probabilities."""
         return np.asarray(self.model.predict(X, verbose=0))
 
 

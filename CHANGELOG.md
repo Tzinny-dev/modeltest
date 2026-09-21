@@ -12,6 +12,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   references and an API reference generated from docstrings; deployed to
   GitHub Pages on every push to `main` (`mkdocs.yml`, `docs/`,
   `.github/workflows/docs.yml`, `make docs`).
+- Complete docstrings for the entire public API (96 objects — core, CLI,
+  runners, reports, all 12 scenarios and the model wrappers), rendered in
+  the API reference with mkdocstrings.
 
 ## [0.2.1] - 2026-09-20
 

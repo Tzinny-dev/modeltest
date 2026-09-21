@@ -67,6 +67,7 @@ plugins:
         python:
           options:
             docstring_style: numpy
+            merge_init_into_class: true
             show_source: true
             show_root_heading: true
             members_order: source

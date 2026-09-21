@@ -18,6 +18,19 @@ def _symbol(r: TestResult) -> str:
 
 
 def render_report(result: SuiteResult, style: str = "table") -> str:
+    """Render a ``SuiteResult`` in the requested style.
+
+    Args:
+        result: The suite outcome to render.
+        style: ``"table"`` (console, default), ``"json"`` or ``"junit"``.
+
+    Returns:
+        The rendered report as a string.
+
+    Raises:
+        ValueError: Via the JSON encoder path if the payload is not
+            serializable (should not happen for standard results).
+    """
     if style == "json":
         return to_json(result)
     if style == "junit":
@@ -37,6 +50,17 @@ def _render_table(result: SuiteResult) -> str:
 
 
 def to_json(result: SuiteResult) -> str:
+    """Serialize a ``SuiteResult`` to a JSON string.
+
+    Includes the suite name, aggregate counts and one object per test with
+    name, status, detail, duration and recorded metrics.
+
+    Args:
+        result: The suite outcome to serialize.
+
+    Returns:
+        Pretty-printed JSON (2-space indent).
+    """
     payload = {
         "suite": result.suite_name,
         "passed": result.passed,
@@ -57,6 +81,18 @@ def to_json(result: SuiteResult) -> str:
 
 
 def to_junit_xml(result: SuiteResult) -> str:
+    """Serialize a ``SuiteResult`` to JUnit XML.
+
+    The output wraps everything in the standard ``<testsuites>`` element
+    expected by CI test reporters (GitHub Actions, Jenkins, GitLab...):
+    FAILED tests become ``<failure>`` nodes, ERROR tests ``<error>``.
+
+    Args:
+        result: The suite outcome to serialize.
+
+    Returns:
+        The XML document as a string.
+    """
     failures = sum(1 for r in result.results if r.status == TestStatus.FAILED)
     errors = sum(1 for r in result.results if r.status == TestStatus.ERROR)
     total = len(result.results)

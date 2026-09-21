@@ -14,6 +14,15 @@ from typing import Any, Callable, Dict, List, Optional
 
 
 class TestStatus(str, Enum):
+    """Outcome status of a single test run.
+
+    Attributes:
+        PASSED: The test returned normally — every assertion held.
+        FAILED: An ``AssertionError`` was raised — the contract is violated.
+        ERROR: Something else went wrong (bad config, missing column...).
+        SKIPPED: The test decided not to run.
+    """
+
     __test__ = False  # don't let pytest collect this as a test class
 
     PASSED = "PASSED"
@@ -49,6 +58,11 @@ class TestContext:
 
     @property
     def model_name(self) -> str:
+        """Name of the model under test.
+
+        Uses the ``model_name`` metadata key when present, falling back to
+        the wrapped model's class name.
+        """
         return str(self.metadata.get("model_name", type(self.model).__name__))
 
     def _wrapped(self) -> Any:
@@ -135,6 +149,7 @@ class TestResult:
 
     @property
     def passed(self) -> bool:
+        """Whether the test passed (status is PASSED)."""
         return self.status == TestStatus.PASSED
 
 
@@ -156,9 +171,36 @@ class ModelTest:
     name: Optional[str] = None
 
     def test(self, ctx: TestContext) -> Any:
+        """Run the check. Subclasses must override this.
+
+        Args:
+            ctx: Context with the model, data and shared prediction cache.
+
+        Returns:
+            Normally nothing: pass/fail is expressed via exceptions. Return
+            a ``TestResult`` to fully control the outcome (warning-only or
+            non-blocking checks).
+
+        Raises:
+            AssertionError: Marks the test as FAILED.
+            Exception: Anything else marks it as ERROR.
+        """
         raise NotImplementedError
 
     def run(self, ctx: TestContext) -> TestResult:
+        """Execute ``test`` and translate the outcome into a ``TestResult``.
+
+        Times the call and maps exceptions to statuses: an
+        ``AssertionError`` becomes FAILED, any other exception becomes
+        ERROR.
+
+        Args:
+            ctx: Context to run against.
+
+        Returns:
+            The outcome for this test, named after ``self.name`` or the
+            class name when no explicit name was set.
+        """
         import time
 
         start = time.perf_counter()
@@ -187,14 +229,23 @@ class ModelSuite:
     """A collection of tests run together against a model + data."""
 
     def __init__(self, name: str = "suite", tests: Optional[List[ModelTest]] = None):
+        """Collect tests to run together against one model + dataset.
+
+        Args:
+            name: Label used in reports and JUnit XML.
+            tests: Initial tests; more can be added with
+                ``add_test`` / ``add_tests``.
+        """
         self.name = name
         self.tests: List[ModelTest] = list(tests) if tests else []
 
     def add_test(self, test: ModelTest) -> "ModelSuite":
+        """Append a test to the suite. Returns self, for chaining."""
         self.tests.append(test)
         return self
 
     def add_tests(self, *tests: ModelTest) -> "ModelSuite":
+        """Append several tests at once. Returns self, for chaining."""
         self.tests.extend(tests)
         return self
 
@@ -207,6 +258,24 @@ class ModelSuite:
         y_train: Any = None,
         **metadata: Any,
     ) -> "SuiteResult":
+        """Run every test against a model and validation data.
+
+        Builds a single ``TestContext`` (with the shared prediction cache)
+        and passes it to all tests, so predictions are computed once.
+
+        Args:
+            model: The model under test (wrapped automatically).
+            X_val: Validation features (DataFrame or array).
+            y_val: Ground-truth labels for the validation set.
+            X_train: Optional training features — required by the
+                [drift tests](../scenarios/drift.md).
+            y_train: Optional training labels.
+            **metadata: Extra key/value pairs stored in the context, e.g.
+                ``model_name="fraud_rf"``.
+
+        Returns:
+            Aggregate outcome with one ``TestResult`` per test.
+        """
         ctx = TestContext(
             model=model,
             X_val=X_val,
@@ -229,17 +298,29 @@ class SuiteResult:
 
     @property
     def passed(self) -> bool:
+        """True when *every* test in the suite passed."""
         return all(r.passed for r in self.results)
 
     @property
     def num_passed(self) -> int:
+        """Count of PASSED tests."""
         return sum(1 for r in self.results if r.passed)
 
     @property
     def num_failed(self) -> int:
+        """Count of tests that did not pass (FAILED, ERROR or SKIPPED)."""
         return sum(1 for r in self.results if not r.passed)
 
     def report(self, style: str = "table") -> str:
+        """Render the suite outcome.
+
+        Args:
+            style: ``"table"`` (console), ``"json"`` (machine-readable) or
+                ``"junit"`` (XML for CI test reporters).
+
+        Returns:
+            The rendered report as a string.
+        """
         from modeltest.core.report import render_report
 
         return render_report(self, style=style)
@@ -254,5 +335,19 @@ class _ResultProxy:
 def assert_metric(
     actual: float, expected: Any, op: Callable[[float, Any], bool], msg: str
 ) -> None:
+    """Raise ``AssertionError`` when ``op(actual, expected)`` is not truthy.
+
+    Small helper for custom tests that express a check as a metric, a
+    comparison and a message.
+
+    Args:
+        actual: Computed metric value.
+        expected: Reference value handed to ``op``.
+        op: Comparison callable, e.g. ``operator.ge``.
+        msg: Failure message used verbatim in the ``AssertionError``.
+
+    Raises:
+        AssertionError: If the comparison fails.
+    """
     if not op(actual, expected):
         raise AssertionError(msg)
