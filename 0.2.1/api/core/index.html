@@ -1,0 +1,5120 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="If you test your code, why not your model? Unit tests for machine learning models: quality, robustness, fairness and data-invariant contracts that run in CI/CD.">
+      
+      
+      
+        <link rel="canonical" href="https://tzinny-dev.github.io/modeltest/0.2.1/api/core/">
+      
+      
+        <link rel="prev" href="../../integrations/mlflow/">
+      
+      
+        <link rel="next" href="../config/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Core - modeltest</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#core" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../.." title="modeltest" class="md-header__button md-logo" aria-label="modeltest" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            modeltest
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Core
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/Tzinny-dev/modeltest" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Tzinny-dev/modeltest
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+
+<nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="modeltest" class="md-nav__button md-logo" aria-label="modeltest" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    modeltest
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/Tzinny-dev/modeltest" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    Tzinny-dev/modeltest
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Usage
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Usage
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/core-concepts/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core concepts
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/cli/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    CLI
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/yaml-suites/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    YAML suites
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/custom-tests/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Custom tests
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../usage/wrappers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Model wrappers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Scenarios
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Scenarios
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../scenarios/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../scenarios/performance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Performance
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../scenarios/robustness/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Robustness
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../scenarios/drift/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Drift
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../scenarios/fairness/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Fairness
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../scenarios/data/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Data invariants
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../scenarios/explainability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Explainability
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Integrations
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Integrations
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integrations/github-actions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    GitHub Actions
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../integrations/mlflow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    MLflow
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API reference
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Core
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#modeltest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        modeltest
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="modeltest">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.ModelSuite" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ModelSuite
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ModelSuite">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.ModelSuite.add_test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        add_test
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.ModelSuite.add_tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        add_tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.ModelSuite.run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        run
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.ModelTest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ModelTest
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ModelTest">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.ModelTest.test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        test
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.ModelTest.run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        run
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.SuiteResult" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SuiteResult
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SuiteResult">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.SuiteResult.passed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        passed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.SuiteResult.num_passed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        num_passed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.SuiteResult.num_failed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        num_failed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.SuiteResult.report" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        report
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.TestContext" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TestContext
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="TestContext">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.TestContext.model_name" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        model_name
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.TestContext.predict" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        predict
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.TestContext.predict_proba" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        predict_proba
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.TestResult" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TestResult
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="TestResult">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.TestResult.passed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        passed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.register" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        register
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.unregister" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        unregister
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.run_suite" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        run_suite
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.run_test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        run_test
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#modeltest.core.base" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        base
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="base">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.base.TestStatus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TestStatus
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.base.TestContext" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TestContext
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="TestContext">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.base.TestContext.model_name" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        model_name
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.base.TestContext.predict" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        predict
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.base.TestContext.predict_proba" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        predict_proba
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.base.TestResult" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TestResult
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="TestResult">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.base.TestResult.passed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        passed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.base.ModelTest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ModelTest
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ModelTest">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.base.ModelTest.test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        test
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.base.ModelTest.run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        run
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.base.ModelSuite" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ModelSuite
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ModelSuite">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.base.ModelSuite.add_test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        add_test
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.base.ModelSuite.add_tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        add_tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.base.ModelSuite.run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        run
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.base.SuiteResult" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SuiteResult
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SuiteResult">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.base.SuiteResult.passed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        passed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.base.SuiteResult.num_passed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        num_passed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.base.SuiteResult.num_failed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        num_failed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.base.SuiteResult.report" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        report
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.base.assert_metric" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        assert_metric
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#modeltest.core.runner" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        runner
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="runner">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.runner.run_test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        run_test
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.runner.run_suite" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        run_suite
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#modeltest.core.report" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        report
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="report">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.report.render_report" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        render_report
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.report.to_json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        to_json
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.report.to_junit_xml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        to_junit_xml
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../config/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Config &amp; YAML
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../wrappers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Wrappers
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../report/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Reports
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#modeltest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        modeltest
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="modeltest">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.ModelSuite" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ModelSuite
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ModelSuite">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.ModelSuite.add_test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        add_test
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.ModelSuite.add_tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        add_tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.ModelSuite.run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        run
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.ModelTest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ModelTest
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ModelTest">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.ModelTest.test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        test
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.ModelTest.run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        run
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.SuiteResult" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SuiteResult
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SuiteResult">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.SuiteResult.passed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        passed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.SuiteResult.num_passed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        num_passed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.SuiteResult.num_failed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        num_failed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.SuiteResult.report" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        report
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.TestContext" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TestContext
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="TestContext">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.TestContext.model_name" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        model_name
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.TestContext.predict" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        predict
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.TestContext.predict_proba" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        predict_proba
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.TestResult" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TestResult
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="TestResult">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.TestResult.passed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        passed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.register" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        register
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.unregister" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        unregister
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.run_suite" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        run_suite
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.run_test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        run_test
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#modeltest.core.base" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        base
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="base">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.base.TestStatus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TestStatus
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.base.TestContext" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TestContext
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="TestContext">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.base.TestContext.model_name" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        model_name
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.base.TestContext.predict" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        predict
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.base.TestContext.predict_proba" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        predict_proba
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.base.TestResult" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        TestResult
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="TestResult">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.base.TestResult.passed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        passed
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.base.ModelTest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ModelTest
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ModelTest">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.base.ModelTest.test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        test
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.base.ModelTest.run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        run
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.base.ModelSuite" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ModelSuite
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="ModelSuite">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.base.ModelSuite.add_test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        add_test
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.base.ModelSuite.add_tests" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        add_tests
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.base.ModelSuite.run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        run
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.base.SuiteResult" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        SuiteResult
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="SuiteResult">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.base.SuiteResult.passed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        passed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.base.SuiteResult.num_passed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        num_passed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.base.SuiteResult.num_failed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        num_failed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.base.SuiteResult.report" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        report
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.base.assert_metric" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        assert_metric
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#modeltest.core.runner" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        runner
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="runner">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.runner.run_test" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        run_test
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.runner.run_suite" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        run_suite
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#modeltest.core.report" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        report
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="report">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.report.render_report" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        render_report
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.report.to_json" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        to_json
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#modeltest.core.report.to_junit_xml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        to_junit_xml
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="core">Core<a class="headerlink" href="#core" title="Permanent link">&para;</a></h1>
+
+
+<div class="doc doc-object doc-module">
+
+
+
+<h2 id="modeltest" class="doc doc-heading">
+            <code>modeltest</code>
+
+
+<a href="#modeltest" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents first">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="modeltest.ModelSuite" class="doc doc-heading">
+              <code class="highlight language-python"><span class="n">ModelSuite</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">'suite'</span><span class="p">,</span> <span class="n">tests</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+<a href="#modeltest.ModelSuite" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+
+
+        <p>A collection of tests run together against a model + data.</p>
+
+        <p>Collect tests to run together against one model + dataset.</p>
+<p>Args:
+    name: Label used in reports and JUnit XML.
+    tests: Initial tests; more can be added with
+        <code>add_test</code> / <code>add_tests</code>.</p>
+
+
+
+
+
+
+
+
+                  <details class="mkdocstrings-source">
+                    <summary>Source code in <code>modeltest/core/base.py</code></summary>
+                    <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span>
+<span class="normal">234</span>
+<span class="normal">235</span>
+<span class="normal">236</span>
+<span class="normal">237</span>
+<span class="normal">238</span>
+<span class="normal">239</span>
+<span class="normal">240</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"suite"</span><span class="p">,</span> <span class="n">tests</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">ModelTest</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Collect tests to run together against one model + dataset.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        name: Label used in reports and JUnit XML.</span>
+<span class="sd">        tests: Initial tests; more can be added with</span>
+<span class="sd">            ``add_test`` / ``add_tests``.</span>
+<span class="sd">    """</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">tests</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ModelTest</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">tests</span><span class="p">)</span> <span class="k">if</span> <span class="n">tests</span> <span class="k">else</span> <span class="p">[]</span>
+</code></pre></div></td></tr></table></div>
+                  </details>
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="modeltest.ModelSuite.add_test" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">add_test</span><span class="p">(</span><span class="n">test</span><span class="p">)</span></code>
+
+<a href="#modeltest.ModelSuite.add_test" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Append a test to the suite. Returns self, for chaining.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>modeltest/core/base.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">242</span>
+<span class="normal">243</span>
+<span class="normal">244</span>
+<span class="normal">245</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">add_test</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test</span><span class="p">:</span> <span class="n">ModelTest</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"ModelSuite"</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Append a test to the suite. Returns self, for chaining."""</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
+    <span class="k">return</span> <span class="bp">self</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="modeltest.ModelSuite.add_tests" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">add_tests</span><span class="p">(</span><span class="o">*</span><span class="n">tests</span><span class="p">)</span></code>
+
+<a href="#modeltest.ModelSuite.add_tests" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Append several tests at once. Returns self, for chaining.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>modeltest/core/base.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">247</span>
+<span class="normal">248</span>
+<span class="normal">249</span>
+<span class="normal">250</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">add_tests</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">tests</span><span class="p">:</span> <span class="n">ModelTest</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"ModelSuite"</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Append several tests at once. Returns self, for chaining."""</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">tests</span><span class="p">)</span>
+    <span class="k">return</span> <span class="bp">self</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="modeltest.ModelSuite.run" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">run</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">X_val</span><span class="p">,</span> <span class="n">y_val</span><span class="p">,</span> <span class="n">X_train</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y_train</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">metadata</span><span class="p">)</span></code>
+
+<a href="#modeltest.ModelSuite.run" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Run every test against a model and validation data.</p>
+<p>Builds a single <code>TestContext</code> (with the shared prediction cache)
+and passes it to all tests, so predictions are computed once.</p>
+<p>Args:
+    model: The model under test (wrapped automatically).
+    X_val: Validation features (DataFrame or array).
+    y_val: Ground-truth labels for the validation set.
+    X_train: Optional training features — required by the
+        <a href="../../scenarios/drift/">drift tests</a>.
+    y_train: Optional training labels.
+    **metadata: Extra key/value pairs stored in the context, e.g.
+        <code>model_name="fraud_rf"</code>.</p>
+<p>Returns:
+    Aggregate outcome with one <code>TestResult</code> per test.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>modeltest/core/base.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">252</span>
+<span class="normal">253</span>
+<span class="normal">254</span>
+<span class="normal">255</span>
+<span class="normal">256</span>
+<span class="normal">257</span>
+<span class="normal">258</span>
+<span class="normal">259</span>
+<span class="normal">260</span>
+<span class="normal">261</span>
+<span class="normal">262</span>
+<span class="normal">263</span>
+<span class="normal">264</span>
+<span class="normal">265</span>
+<span class="normal">266</span>
+<span class="normal">267</span>
+<span class="normal">268</span>
+<span class="normal">269</span>
+<span class="normal">270</span>
+<span class="normal">271</span>
+<span class="normal">272</span>
+<span class="normal">273</span>
+<span class="normal">274</span>
+<span class="normal">275</span>
+<span class="normal">276</span>
+<span class="normal">277</span>
+<span class="normal">278</span>
+<span class="normal">279</span>
+<span class="normal">280</span>
+<span class="normal">281</span>
+<span class="normal">282</span>
+<span class="normal">283</span>
+<span class="normal">284</span>
+<span class="normal">285</span>
+<span class="normal">286</span>
+<span class="normal">287</span>
+<span class="normal">288</span>
+<span class="normal">289</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="n">X_val</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="n">y_val</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="n">X_train</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">y_train</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">metadata</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"SuiteResult"</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Run every test against a model and validation data.</span>
+
+<span class="sd">    Builds a single ``TestContext`` (with the shared prediction cache)</span>
+<span class="sd">    and passes it to all tests, so predictions are computed once.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model: The model under test (wrapped automatically).</span>
+<span class="sd">        X_val: Validation features (DataFrame or array).</span>
+<span class="sd">        y_val: Ground-truth labels for the validation set.</span>
+<span class="sd">        X_train: Optional training features — required by the</span>
+<span class="sd">            [drift tests](../scenarios/drift.md).</span>
+<span class="sd">        y_train: Optional training labels.</span>
+<span class="sd">        **metadata: Extra key/value pairs stored in the context, e.g.</span>
+<span class="sd">            ``model_name="fraud_rf"``.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Aggregate outcome with one ``TestResult`` per test.</span>
+<span class="sd">    """</span>
+    <span class="n">ctx</span> <span class="o">=</span> <span class="n">TestContext</span><span class="p">(</span>
+        <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+        <span class="n">X_val</span><span class="o">=</span><span class="n">X_val</span><span class="p">,</span>
+        <span class="n">y_val</span><span class="o">=</span><span class="n">y_val</span><span class="p">,</span>
+        <span class="n">X_train</span><span class="o">=</span><span class="n">X_train</span><span class="p">,</span>
+        <span class="n">y_train</span><span class="o">=</span><span class="n">y_train</span><span class="p">,</span>
+        <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span> <span class="ow">or</span> <span class="p">{},</span>
+    <span class="p">)</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">modeltest.core.runner</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_suite</span>
+
+    <span class="k">return</span> <span class="n">run_suite</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="modeltest.ModelTest" class="doc doc-heading">
+            <code>ModelTest</code>
+
+
+<a href="#modeltest.ModelTest" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+
+
+        <p>Base class for all model tests.</p>
+<p>Subclasses override <code>test(self, ctx)</code>. Raising <code>AssertionError</code> (or any
+<code>assert</code> failure) marks the test as FAILED; raising anything else marks
+it as ERROR. Returning a :class:<code>TestResult</code> lets a test fully control the
+outcome (useful for warning-only / non-blocking checks).</p>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="modeltest.ModelTest.test" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">test</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span></code>
+
+<a href="#modeltest.ModelTest.test" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Run the check. Subclasses must override this.</p>
+<p>Args:
+    ctx: Context with the model, data and shared prediction cache.</p>
+<p>Returns:
+    Normally nothing: pass/fail is expressed via exceptions. Return
+    a <code>TestResult</code> to fully control the outcome (warning-only or
+    non-blocking checks).</p>
+<p>Raises:
+    AssertionError: Marks the test as FAILED.
+    Exception: Anything else marks it as ERROR.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>modeltest/core/base.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">TestContext</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Run the check. Subclasses must override this.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        ctx: Context with the model, data and shared prediction cache.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Normally nothing: pass/fail is expressed via exceptions. Return</span>
+<span class="sd">        a ``TestResult`` to fully control the outcome (warning-only or</span>
+<span class="sd">        non-blocking checks).</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        AssertionError: Marks the test as FAILED.</span>
+<span class="sd">        Exception: Anything else marks it as ERROR.</span>
+<span class="sd">    """</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="modeltest.ModelTest.run" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">run</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span></code>
+
+<a href="#modeltest.ModelTest.run" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Execute <code>test</code> and translate the outcome into a <code>TestResult</code>.</p>
+<p>Times the call and maps exceptions to statuses: an
+<code>AssertionError</code> becomes FAILED, any other exception becomes
+ERROR.</p>
+<p>Args:
+    ctx: Context to run against.</p>
+<p>Returns:
+    The outcome for this test, named after <code>self.name</code> or the
+    class name when no explicit name was set.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>modeltest/core/base.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span>
+<span class="normal">219</span>
+<span class="normal">220</span>
+<span class="normal">221</span>
+<span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">TestContext</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TestResult</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Execute ``test`` and translate the outcome into a ``TestResult``.</span>
+
+<span class="sd">    Times the call and maps exceptions to statuses: an</span>
+<span class="sd">    ``AssertionError`` becomes FAILED, any other exception becomes</span>
+<span class="sd">    ERROR.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        ctx: Context to run against.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The outcome for this test, named after ``self.name`` or the</span>
+<span class="sd">        class name when no explicit name was set.</span>
+<span class="sd">    """</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+    <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+    <span class="n">status</span><span class="p">,</span> <span class="n">detail</span><span class="p">,</span> <span class="n">metrics</span> <span class="o">=</span> <span class="n">TestStatus</span><span class="o">.</span><span class="n">PASSED</span><span class="p">,</span> <span class="s2">""</span><span class="p">,</span> <span class="p">{}</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">outcome</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">outcome</span><span class="p">,</span> <span class="n">TestResult</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">outcome</span>
+    <span class="k">except</span> <span class="ne">AssertionError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="n">TestStatus</span><span class="o">.</span><span class="n">FAILED</span>
+        <span class="n">detail</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">exc</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>  <span class="c1"># noqa: BLE001 - unknown failures are ERRORs</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="n">TestStatus</span><span class="o">.</span><span class="n">ERROR</span>
+        <span class="n">detail</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">exc</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">"</span>
+    <span class="n">duration</span> <span class="o">=</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span>
+    <span class="k">return</span> <span class="n">TestResult</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="ow">or</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+        <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="p">,</span>
+        <span class="n">detail</span><span class="o">=</span><span class="n">detail</span><span class="p">,</span>
+        <span class="n">duration_ms</span><span class="o">=</span><span class="n">duration</span><span class="p">,</span>
+        <span class="n">metrics</span><span class="o">=</span><span class="n">metrics</span><span class="p">,</span>
+    <span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="modeltest.SuiteResult" class="doc doc-heading">
+              <code class="highlight language-python"><span class="n">SuiteResult</span><span class="p">(</span><span class="n">suite_name</span><span class="p">,</span> <span class="n">results</span><span class="o">=</span><span class="nb">list</span><span class="p">())</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#modeltest.SuiteResult" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+
+
+        <p>Aggregate outcome of running every test in a suite.</p>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="modeltest.SuiteResult.passed" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">passed</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#modeltest.SuiteResult.passed" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>True when <em>every</em> test in the suite passed.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="modeltest.SuiteResult.num_passed" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">num_passed</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#modeltest.SuiteResult.num_passed" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Count of PASSED tests.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="modeltest.SuiteResult.num_failed" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">num_failed</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#modeltest.SuiteResult.num_failed" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Count of tests that did not pass (FAILED, ERROR or SKIPPED).</p>
+
+    </div>
+
+</div>
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="modeltest.SuiteResult.report" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">report</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s1">'table'</span><span class="p">)</span></code>
+
+<a href="#modeltest.SuiteResult.report" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Render the suite outcome.</p>
+<p>Args:
+    style: <code>"table"</code> (console), <code>"json"</code> (machine-readable) or
+        <code>"junit"</code> (XML for CI test reporters).</p>
+<p>Returns:
+    The rendered report as a string.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>modeltest/core/base.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">314</span>
+<span class="normal">315</span>
+<span class="normal">316</span>
+<span class="normal">317</span>
+<span class="normal">318</span>
+<span class="normal">319</span>
+<span class="normal">320</span>
+<span class="normal">321</span>
+<span class="normal">322</span>
+<span class="normal">323</span>
+<span class="normal">324</span>
+<span class="normal">325</span>
+<span class="normal">326</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">report</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">style</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"table"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Render the suite outcome.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        style: ``"table"`` (console), ``"json"`` (machine-readable) or</span>
+<span class="sd">            ``"junit"`` (XML for CI test reporters).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The rendered report as a string.</span>
+<span class="sd">    """</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">modeltest.core.report</span><span class="w"> </span><span class="kn">import</span> <span class="n">render_report</span>
+
+    <span class="k">return</span> <span class="n">render_report</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="n">style</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="modeltest.TestContext" class="doc doc-heading">
+              <code class="highlight language-python"><span class="n">TestContext</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">X_val</span><span class="p">,</span> <span class="n">y_val</span><span class="p">,</span> <span class="n">X_train</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y_train</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="nb">dict</span><span class="p">(),</span> <span class="n">cache_predictions</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">_cache</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">_wrapper</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#modeltest.TestContext" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+
+
+        <p>Everything a test may need at runtime.</p>
+<p>A unified context (rather than a loose <code>model, X, y</code> signature) lets tests
+grow (drift needs train vs val; explainability needs metadata) without
+breaking the base API.</p>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="modeltest.TestContext.model_name" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">model_name</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#modeltest.TestContext.model_name" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Name of the model under test.</p>
+<p>Uses the <code>model_name</code> metadata key when present, falling back to
+the wrapped model's class name.</p>
+
+    </div>
+
+</div>
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="modeltest.TestContext.predict" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+<a href="#modeltest.TestContext.predict" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Predict with caching.</p>
+<p>Delegates to the model via the framework adapter while transparently
+dropping non-feature columns (via <code>model_features</code>). When
+<code>cache_predictions</code> is on, the result is keyed by a content hash of
+the input so that multiple tests predicting on the <em>same data</em> run the
+model only once per suite.</p>
+<p>Passing <code>X=None</code> predicts on <code>self.X_val</code>.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>modeltest/core/base.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 76</span>
+<span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Predict with caching.</span>
+
+<span class="sd">    Delegates to the model via the framework adapter while transparently</span>
+<span class="sd">    dropping non-feature columns (via ``model_features``). When</span>
+<span class="sd">    ``cache_predictions`` is on, the result is keyed by a content hash of</span>
+<span class="sd">    the input so that multiple tests predicting on the *same data* run the</span>
+<span class="sd">    model only once per suite.</span>
+
+<span class="sd">    Passing ``X=None`` predicts on ``self.X_val``.</span>
+<span class="sd">    """</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">modeltest.scenarios._utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">model_features</span>
+
+    <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">X_val</span> <span class="k">if</span> <span class="n">X</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">X</span>
+    <span class="n">wrapped</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wrapped</span><span class="p">()</span>
+    <span class="n">X_feat</span> <span class="o">=</span> <span class="n">model_features</span><span class="p">(</span><span class="n">wrapped</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache_predictions</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">wrapped</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_feat</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="n">key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fingerprint</span><span class="p">(</span><span class="n">X_feat</span><span class="p">)</span>
+    <span class="n">cached</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">cached</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">cached</span>
+    <span class="n">pred</span> <span class="o">=</span> <span class="n">wrapped</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_feat</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">pred</span>
+    <span class="k">return</span> <span class="n">pred</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="modeltest.TestContext.predict_proba" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">predict_proba</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+<a href="#modeltest.TestContext.predict_proba" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Probability estimates via the wrapper (or <code>None</code> if unsupported).</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>modeltest/core/base.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">predict_proba</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Probability estimates via the wrapper (or ``None`` if unsupported)."""</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">modeltest.scenarios._utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">model_features</span>
+
+    <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">X_val</span> <span class="k">if</span> <span class="n">X</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">X</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wrapped</span><span class="p">()</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">model_features</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_wrapped</span><span class="p">(),</span> <span class="n">X</span><span class="p">))</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="modeltest.TestResult" class="doc doc-heading">
+              <code class="highlight language-python"><span class="n">TestResult</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">status</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s1">''</span><span class="p">,</span> <span class="n">duration_ms</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="nb">dict</span><span class="p">())</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#modeltest.TestResult" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+
+
+        <p>Outcome of running a single test.</p>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="modeltest.TestResult.passed" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">passed</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#modeltest.TestResult.passed" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Whether the test passed (status is PASSED).</p>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="modeltest.register" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">register</span><span class="p">(</span><span class="n">type_name</span><span class="p">,</span> <span class="bp">cls</span><span class="p">)</span></code>
+
+<a href="#modeltest.register" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Map a YAML <code>type</code> string to a custom test class.</p>
+<p>Custom tests must subclass :class:<code>modeltest.ModelTest</code>. Registering
+before :func:<code>load_suite_yaml</code> lets a suite reference your test by name::</p>
+<div class="highlight"><pre><span></span><code>from modeltest.config import register
+register("my_error_check", MyErrorCheck)
+
+# suite.yaml
+# suite:
+#   tests:
+#     - type: my_error_check
+#       params: {max_errors: 5}
+</code></pre></div>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>modeltest/config.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span>
+<span class="normal">81</span>
+<span class="normal">82</span>
+<span class="normal">83</span>
+<span class="normal">84</span>
+<span class="normal">85</span>
+<span class="normal">86</span>
+<span class="normal">87</span>
+<span class="normal">88</span>
+<span class="normal">89</span>
+<span class="normal">90</span>
+<span class="normal">91</span>
+<span class="normal">92</span>
+<span class="normal">93</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">register</span><span class="p">(</span><span class="n">type_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="bp">cls</span><span class="p">:</span> <span class="nb">type</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Map a YAML ``type`` string to a custom test class.</span>
+
+<span class="sd">    Custom tests must subclass :class:`modeltest.ModelTest`. Registering</span>
+<span class="sd">    before :func:`load_suite_yaml` lets a suite reference your test by name::</span>
+
+<span class="sd">        from modeltest.config import register</span>
+<span class="sd">        register("my_error_check", MyErrorCheck)</span>
+
+<span class="sd">        # suite.yaml</span>
+<span class="sd">        # suite:</span>
+<span class="sd">        #   tests:</span>
+<span class="sd">        #     - type: my_error_check</span>
+<span class="sd">        #       params: {max_errors: 5}</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">issubclass</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">ModelTest</span><span class="p">)):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"register() expects a ModelTest subclass, got </span><span class="si">{</span><span class="bp">cls</span><span class="si">!r}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="n">_REGISTRY</span><span class="p">[</span><span class="n">type_name</span><span class="p">]</span> <span class="o">=</span> <span class="bp">cls</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="modeltest.unregister" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">unregister</span><span class="p">(</span><span class="n">type_name</span><span class="p">)</span></code>
+
+<a href="#modeltest.unregister" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Remove a previously registered type (built-ins included).</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>modeltest/config.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">96</span>
+<span class="normal">97</span>
+<span class="normal">98</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">unregister</span><span class="p">(</span><span class="n">type_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Remove a previously registered type (built-ins included)."""</span>
+    <span class="n">_REGISTRY</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">type_name</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="modeltest.run_suite" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">run_suite</span><span class="p">(</span><span class="n">suite</span><span class="p">,</span> <span class="n">ctx</span><span class="p">)</span></code>
+
+<a href="#modeltest.run_suite" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Run every test in a suite against one shared context.</p>
+<p>Sharing the context is what makes prediction caching work across
+tests: the first prediction is computed and every later test predicting
+on the same data reuses it.</p>
+<p>Args:
+    suite: The suite to execute.
+    ctx: The (single) context handed to every test.</p>
+<p>Returns:
+    Aggregate outcome with one <code>TestResult</code> per test, in order.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>modeltest/core/runner.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">run_suite</span><span class="p">(</span><span class="n">suite</span><span class="p">:</span> <span class="n">ModelSuite</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">TestContext</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SuiteResult</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Run every test in a suite against one shared context.</span>
+
+<span class="sd">    Sharing the context is what makes prediction caching work across</span>
+<span class="sd">    tests: the first prediction is computed and every later test predicting</span>
+<span class="sd">    on the same data reuses it.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        suite: The suite to execute.</span>
+<span class="sd">        ctx: The (single) context handed to every test.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Aggregate outcome with one ``TestResult`` per test, in order.</span>
+<span class="sd">    """</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[</span><span class="n">test</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span> <span class="k">for</span> <span class="n">test</span> <span class="ow">in</span> <span class="n">suite</span><span class="o">.</span><span class="n">tests</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">SuiteResult</span><span class="p">(</span><span class="n">suite_name</span><span class="o">=</span><span class="n">suite</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">results</span><span class="o">=</span><span class="n">results</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="modeltest.run_test" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">run_test</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="n">ctx</span><span class="p">)</span></code>
+
+<a href="#modeltest.run_test" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Run a single test against a context.</p>
+<p>Args:
+    test: The test to execute.
+    ctx: Context with model, data and the shared prediction cache.</p>
+<p>Returns:
+    The test's <code>TestResult</code>.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>modeltest/core/runner.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">run_test</span><span class="p">(</span><span class="n">test</span><span class="p">:</span> <span class="n">ModelTest</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">TestContext</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Run a single test against a context.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        test: The test to execute.</span>
+<span class="sd">        ctx: Context with model, data and the shared prediction cache.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The test's ``TestResult``.</span>
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="n">test</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+
+<h2 id="modeltest.core.base" class="doc doc-heading">
+            <code>modeltest.core.base</code>
+
+
+<a href="#modeltest.core.base" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents first">
+
+        <p>Core primitives: ModelTest, TestContext, TestResult, ModelSuite.</p>
+<p>The design mirrors how <code>pytest</code> structures tests but is oriented to ML:
+each test receives a rich context (model + data + metadata) instead of a
+bare function signature. A test <em>passes</em> by returning normally and <em>fails</em>
+by raising an assertion / returning a TestResult with passed=False.</p>
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="modeltest.core.base.TestStatus" class="doc doc-heading">
+            <code>TestStatus</code>
+
+
+<a href="#modeltest.core.base.TestStatus" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+            <p class="doc doc-class-bases">
+              Bases: <code><span title="str">str</span></code>, <code><span title="enum.Enum">Enum</span></code></p>
+
+
+
+        <p>Outcome status of a single test run.</p>
+<p>Attributes:
+    PASSED: The test returned normally — every assertion held.
+    FAILED: An <code>AssertionError</code> was raised — the contract is violated.
+    ERROR: Something else went wrong (bad config, missing column...).
+    SKIPPED: The test decided not to run.</p>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="modeltest.core.base.TestContext" class="doc doc-heading">
+              <code class="highlight language-python"><span class="n">TestContext</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">X_val</span><span class="p">,</span> <span class="n">y_val</span><span class="p">,</span> <span class="n">X_train</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y_train</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">metadata</span><span class="o">=</span><span class="nb">dict</span><span class="p">(),</span> <span class="n">cache_predictions</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">_cache</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">_wrapper</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#modeltest.core.base.TestContext" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+
+
+        <p>Everything a test may need at runtime.</p>
+<p>A unified context (rather than a loose <code>model, X, y</code> signature) lets tests
+grow (drift needs train vs val; explainability needs metadata) without
+breaking the base API.</p>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="modeltest.core.base.TestContext.model_name" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">model_name</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#modeltest.core.base.TestContext.model_name" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Name of the model under test.</p>
+<p>Uses the <code>model_name</code> metadata key when present, falling back to
+the wrapped model's class name.</p>
+
+    </div>
+
+</div>
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="modeltest.core.base.TestContext.predict" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">predict</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+<a href="#modeltest.core.base.TestContext.predict" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Predict with caching.</p>
+<p>Delegates to the model via the framework adapter while transparently
+dropping non-feature columns (via <code>model_features</code>). When
+<code>cache_predictions</code> is on, the result is keyed by a content hash of
+the input so that multiple tests predicting on the <em>same data</em> run the
+model only once per suite.</p>
+<p>Passing <code>X=None</code> predicts on <code>self.X_val</code>.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>modeltest/core/base.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 76</span>
+<span class="normal"> 77</span>
+<span class="normal"> 78</span>
+<span class="normal"> 79</span>
+<span class="normal"> 80</span>
+<span class="normal"> 81</span>
+<span class="normal"> 82</span>
+<span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">predict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Predict with caching.</span>
+
+<span class="sd">    Delegates to the model via the framework adapter while transparently</span>
+<span class="sd">    dropping non-feature columns (via ``model_features``). When</span>
+<span class="sd">    ``cache_predictions`` is on, the result is keyed by a content hash of</span>
+<span class="sd">    the input so that multiple tests predicting on the *same data* run the</span>
+<span class="sd">    model only once per suite.</span>
+
+<span class="sd">    Passing ``X=None`` predicts on ``self.X_val``.</span>
+<span class="sd">    """</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">modeltest.scenarios._utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">model_features</span>
+
+    <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">X_val</span> <span class="k">if</span> <span class="n">X</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">X</span>
+    <span class="n">wrapped</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wrapped</span><span class="p">()</span>
+    <span class="n">X_feat</span> <span class="o">=</span> <span class="n">model_features</span><span class="p">(</span><span class="n">wrapped</span><span class="p">,</span> <span class="n">X</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">cache_predictions</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">wrapped</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_feat</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="n">key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fingerprint</span><span class="p">(</span><span class="n">X_feat</span><span class="p">)</span>
+    <span class="n">cached</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">cached</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">cached</span>
+    <span class="n">pred</span> <span class="o">=</span> <span class="n">wrapped</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">X_feat</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_cache</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">pred</span>
+    <span class="k">return</span> <span class="n">pred</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="modeltest.core.base.TestContext.predict_proba" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">predict_proba</span><span class="p">(</span><span class="n">X</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+<a href="#modeltest.core.base.TestContext.predict_proba" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Probability estimates via the wrapper (or <code>None</code> if unsupported).</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>modeltest/core/base.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">predict_proba</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">X</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Probability estimates via the wrapper (or ``None`` if unsupported)."""</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">modeltest.scenarios._utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">model_features</span>
+
+    <span class="n">X</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">X_val</span> <span class="k">if</span> <span class="n">X</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">X</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wrapped</span><span class="p">()</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">model_features</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_wrapped</span><span class="p">(),</span> <span class="n">X</span><span class="p">))</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="modeltest.core.base.TestResult" class="doc doc-heading">
+              <code class="highlight language-python"><span class="n">TestResult</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">status</span><span class="p">,</span> <span class="n">detail</span><span class="o">=</span><span class="s1">''</span><span class="p">,</span> <span class="n">duration_ms</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">metrics</span><span class="o">=</span><span class="nb">dict</span><span class="p">())</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#modeltest.core.base.TestResult" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+
+
+        <p>Outcome of running a single test.</p>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="modeltest.core.base.TestResult.passed" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">passed</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#modeltest.core.base.TestResult.passed" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Whether the test passed (status is PASSED).</p>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="modeltest.core.base.ModelTest" class="doc doc-heading">
+            <code>ModelTest</code>
+
+
+<a href="#modeltest.core.base.ModelTest" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+
+
+        <p>Base class for all model tests.</p>
+<p>Subclasses override <code>test(self, ctx)</code>. Raising <code>AssertionError</code> (or any
+<code>assert</code> failure) marks the test as FAILED; raising anything else marks
+it as ERROR. Returning a :class:<code>TestResult</code> lets a test fully control the
+outcome (useful for warning-only / non-blocking checks).</p>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="modeltest.core.base.ModelTest.test" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">test</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span></code>
+
+<a href="#modeltest.core.base.ModelTest.test" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Run the check. Subclasses must override this.</p>
+<p>Args:
+    ctx: Context with the model, data and shared prediction cache.</p>
+<p>Returns:
+    Normally nothing: pass/fail is expressed via exceptions. Return
+    a <code>TestResult</code> to fully control the outcome (warning-only or
+    non-blocking checks).</p>
+<p>Raises:
+    AssertionError: Marks the test as FAILED.
+    Exception: Anything else marks it as ERROR.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>modeltest/core/base.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">173</span>
+<span class="normal">174</span>
+<span class="normal">175</span>
+<span class="normal">176</span>
+<span class="normal">177</span>
+<span class="normal">178</span>
+<span class="normal">179</span>
+<span class="normal">180</span>
+<span class="normal">181</span>
+<span class="normal">182</span>
+<span class="normal">183</span>
+<span class="normal">184</span>
+<span class="normal">185</span>
+<span class="normal">186</span>
+<span class="normal">187</span>
+<span class="normal">188</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">test</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">TestContext</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Run the check. Subclasses must override this.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        ctx: Context with the model, data and shared prediction cache.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Normally nothing: pass/fail is expressed via exceptions. Return</span>
+<span class="sd">        a ``TestResult`` to fully control the outcome (warning-only or</span>
+<span class="sd">        non-blocking checks).</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        AssertionError: Marks the test as FAILED.</span>
+<span class="sd">        Exception: Anything else marks it as ERROR.</span>
+<span class="sd">    """</span>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="modeltest.core.base.ModelTest.run" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">run</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span></code>
+
+<a href="#modeltest.core.base.ModelTest.run" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Execute <code>test</code> and translate the outcome into a <code>TestResult</code>.</p>
+<p>Times the call and maps exceptions to statuses: an
+<code>AssertionError</code> becomes FAILED, any other exception becomes
+ERROR.</p>
+<p>Args:
+    ctx: Context to run against.</p>
+<p>Returns:
+    The outcome for this test, named after <code>self.name</code> or the
+    class name when no explicit name was set.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>modeltest/core/base.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">190</span>
+<span class="normal">191</span>
+<span class="normal">192</span>
+<span class="normal">193</span>
+<span class="normal">194</span>
+<span class="normal">195</span>
+<span class="normal">196</span>
+<span class="normal">197</span>
+<span class="normal">198</span>
+<span class="normal">199</span>
+<span class="normal">200</span>
+<span class="normal">201</span>
+<span class="normal">202</span>
+<span class="normal">203</span>
+<span class="normal">204</span>
+<span class="normal">205</span>
+<span class="normal">206</span>
+<span class="normal">207</span>
+<span class="normal">208</span>
+<span class="normal">209</span>
+<span class="normal">210</span>
+<span class="normal">211</span>
+<span class="normal">212</span>
+<span class="normal">213</span>
+<span class="normal">214</span>
+<span class="normal">215</span>
+<span class="normal">216</span>
+<span class="normal">217</span>
+<span class="normal">218</span>
+<span class="normal">219</span>
+<span class="normal">220</span>
+<span class="normal">221</span>
+<span class="normal">222</span>
+<span class="normal">223</span>
+<span class="normal">224</span>
+<span class="normal">225</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">TestContext</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">TestResult</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Execute ``test`` and translate the outcome into a ``TestResult``.</span>
+
+<span class="sd">    Times the call and maps exceptions to statuses: an</span>
+<span class="sd">    ``AssertionError`` becomes FAILED, any other exception becomes</span>
+<span class="sd">    ERROR.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        ctx: Context to run against.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The outcome for this test, named after ``self.name`` or the</span>
+<span class="sd">        class name when no explicit name was set.</span>
+<span class="sd">    """</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+
+    <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+    <span class="n">status</span><span class="p">,</span> <span class="n">detail</span><span class="p">,</span> <span class="n">metrics</span> <span class="o">=</span> <span class="n">TestStatus</span><span class="o">.</span><span class="n">PASSED</span><span class="p">,</span> <span class="s2">""</span><span class="p">,</span> <span class="p">{}</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">outcome</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">test</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">outcome</span><span class="p">,</span> <span class="n">TestResult</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">outcome</span>
+    <span class="k">except</span> <span class="ne">AssertionError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="n">TestStatus</span><span class="o">.</span><span class="n">FAILED</span>
+        <span class="n">detail</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">exc</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>  <span class="c1"># noqa: BLE001 - unknown failures are ERRORs</span>
+        <span class="n">status</span> <span class="o">=</span> <span class="n">TestStatus</span><span class="o">.</span><span class="n">ERROR</span>
+        <span class="n">detail</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">exc</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">"</span>
+    <span class="n">duration</span> <span class="o">=</span> <span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span>
+    <span class="k">return</span> <span class="n">TestResult</span><span class="p">(</span>
+        <span class="n">name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="ow">or</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span>
+        <span class="n">status</span><span class="o">=</span><span class="n">status</span><span class="p">,</span>
+        <span class="n">detail</span><span class="o">=</span><span class="n">detail</span><span class="p">,</span>
+        <span class="n">duration_ms</span><span class="o">=</span><span class="n">duration</span><span class="p">,</span>
+        <span class="n">metrics</span><span class="o">=</span><span class="n">metrics</span><span class="p">,</span>
+    <span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="modeltest.core.base.ModelSuite" class="doc doc-heading">
+              <code class="highlight language-python"><span class="n">ModelSuite</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">'suite'</span><span class="p">,</span> <span class="n">tests</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+<a href="#modeltest.core.base.ModelSuite" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+
+
+        <p>A collection of tests run together against a model + data.</p>
+
+        <p>Collect tests to run together against one model + dataset.</p>
+<p>Args:
+    name: Label used in reports and JUnit XML.
+    tests: Initial tests; more can be added with
+        <code>add_test</code> / <code>add_tests</code>.</p>
+
+
+
+
+
+
+
+
+                  <details class="mkdocstrings-source">
+                    <summary>Source code in <code>modeltest/core/base.py</code></summary>
+                    <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">231</span>
+<span class="normal">232</span>
+<span class="normal">233</span>
+<span class="normal">234</span>
+<span class="normal">235</span>
+<span class="normal">236</span>
+<span class="normal">237</span>
+<span class="normal">238</span>
+<span class="normal">239</span>
+<span class="normal">240</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"suite"</span><span class="p">,</span> <span class="n">tests</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">List</span><span class="p">[</span><span class="n">ModelTest</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Collect tests to run together against one model + dataset.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        name: Label used in reports and JUnit XML.</span>
+<span class="sd">        tests: Initial tests; more can be added with</span>
+<span class="sd">            ``add_test`` / ``add_tests``.</span>
+<span class="sd">    """</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">tests</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="n">ModelTest</span><span class="p">]</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">tests</span><span class="p">)</span> <span class="k">if</span> <span class="n">tests</span> <span class="k">else</span> <span class="p">[]</span>
+</code></pre></div></td></tr></table></div>
+                  </details>
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="modeltest.core.base.ModelSuite.add_test" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">add_test</span><span class="p">(</span><span class="n">test</span><span class="p">)</span></code>
+
+<a href="#modeltest.core.base.ModelSuite.add_test" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Append a test to the suite. Returns self, for chaining.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>modeltest/core/base.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">242</span>
+<span class="normal">243</span>
+<span class="normal">244</span>
+<span class="normal">245</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">add_test</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">test</span><span class="p">:</span> <span class="n">ModelTest</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"ModelSuite"</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Append a test to the suite. Returns self, for chaining."""</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">test</span><span class="p">)</span>
+    <span class="k">return</span> <span class="bp">self</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="modeltest.core.base.ModelSuite.add_tests" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">add_tests</span><span class="p">(</span><span class="o">*</span><span class="n">tests</span><span class="p">)</span></code>
+
+<a href="#modeltest.core.base.ModelSuite.add_tests" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Append several tests at once. Returns self, for chaining.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>modeltest/core/base.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">247</span>
+<span class="normal">248</span>
+<span class="normal">249</span>
+<span class="normal">250</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">add_tests</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">tests</span><span class="p">:</span> <span class="n">ModelTest</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"ModelSuite"</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Append several tests at once. Returns self, for chaining."""</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">tests</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">tests</span><span class="p">)</span>
+    <span class="k">return</span> <span class="bp">self</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="modeltest.core.base.ModelSuite.run" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">run</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">X_val</span><span class="p">,</span> <span class="n">y_val</span><span class="p">,</span> <span class="n">X_train</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y_train</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">metadata</span><span class="p">)</span></code>
+
+<a href="#modeltest.core.base.ModelSuite.run" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Run every test against a model and validation data.</p>
+<p>Builds a single <code>TestContext</code> (with the shared prediction cache)
+and passes it to all tests, so predictions are computed once.</p>
+<p>Args:
+    model: The model under test (wrapped automatically).
+    X_val: Validation features (DataFrame or array).
+    y_val: Ground-truth labels for the validation set.
+    X_train: Optional training features — required by the
+        <a href="../../scenarios/drift/">drift tests</a>.
+    y_train: Optional training labels.
+    **metadata: Extra key/value pairs stored in the context, e.g.
+        <code>model_name="fraud_rf"</code>.</p>
+<p>Returns:
+    Aggregate outcome with one <code>TestResult</code> per test.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>modeltest/core/base.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">252</span>
+<span class="normal">253</span>
+<span class="normal">254</span>
+<span class="normal">255</span>
+<span class="normal">256</span>
+<span class="normal">257</span>
+<span class="normal">258</span>
+<span class="normal">259</span>
+<span class="normal">260</span>
+<span class="normal">261</span>
+<span class="normal">262</span>
+<span class="normal">263</span>
+<span class="normal">264</span>
+<span class="normal">265</span>
+<span class="normal">266</span>
+<span class="normal">267</span>
+<span class="normal">268</span>
+<span class="normal">269</span>
+<span class="normal">270</span>
+<span class="normal">271</span>
+<span class="normal">272</span>
+<span class="normal">273</span>
+<span class="normal">274</span>
+<span class="normal">275</span>
+<span class="normal">276</span>
+<span class="normal">277</span>
+<span class="normal">278</span>
+<span class="normal">279</span>
+<span class="normal">280</span>
+<span class="normal">281</span>
+<span class="normal">282</span>
+<span class="normal">283</span>
+<span class="normal">284</span>
+<span class="normal">285</span>
+<span class="normal">286</span>
+<span class="normal">287</span>
+<span class="normal">288</span>
+<span class="normal">289</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">run</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">model</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="n">X_val</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="n">y_val</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="n">X_train</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">y_train</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">metadata</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">"SuiteResult"</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Run every test against a model and validation data.</span>
+
+<span class="sd">    Builds a single ``TestContext`` (with the shared prediction cache)</span>
+<span class="sd">    and passes it to all tests, so predictions are computed once.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model: The model under test (wrapped automatically).</span>
+<span class="sd">        X_val: Validation features (DataFrame or array).</span>
+<span class="sd">        y_val: Ground-truth labels for the validation set.</span>
+<span class="sd">        X_train: Optional training features — required by the</span>
+<span class="sd">            [drift tests](../scenarios/drift.md).</span>
+<span class="sd">        y_train: Optional training labels.</span>
+<span class="sd">        **metadata: Extra key/value pairs stored in the context, e.g.</span>
+<span class="sd">            ``model_name="fraud_rf"``.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Aggregate outcome with one ``TestResult`` per test.</span>
+<span class="sd">    """</span>
+    <span class="n">ctx</span> <span class="o">=</span> <span class="n">TestContext</span><span class="p">(</span>
+        <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+        <span class="n">X_val</span><span class="o">=</span><span class="n">X_val</span><span class="p">,</span>
+        <span class="n">y_val</span><span class="o">=</span><span class="n">y_val</span><span class="p">,</span>
+        <span class="n">X_train</span><span class="o">=</span><span class="n">X_train</span><span class="p">,</span>
+        <span class="n">y_train</span><span class="o">=</span><span class="n">y_train</span><span class="p">,</span>
+        <span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span> <span class="ow">or</span> <span class="p">{},</span>
+    <span class="p">)</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">modeltest.core.runner</span><span class="w"> </span><span class="kn">import</span> <span class="n">run_suite</span>
+
+    <span class="k">return</span> <span class="n">run_suite</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="modeltest.core.base.SuiteResult" class="doc doc-heading">
+              <code class="highlight language-python"><span class="n">SuiteResult</span><span class="p">(</span><span class="n">suite_name</span><span class="p">,</span> <span class="n">results</span><span class="o">=</span><span class="nb">list</span><span class="p">())</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-dataclass"><code>dataclass</code></small>
+  </span>
+
+<a href="#modeltest.core.base.SuiteResult" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+
+
+        <p>Aggregate outcome of running every test in a suite.</p>
+
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="modeltest.core.base.SuiteResult.passed" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">passed</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#modeltest.core.base.SuiteResult.passed" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>True when <em>every</em> test in the suite passed.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="modeltest.core.base.SuiteResult.num_passed" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">num_passed</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#modeltest.core.base.SuiteResult.num_passed" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Count of PASSED tests.</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="modeltest.core.base.SuiteResult.num_failed" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">num_failed</span></code>
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#modeltest.core.base.SuiteResult.num_failed" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Count of tests that did not pass (FAILED, ERROR or SKIPPED).</p>
+
+    </div>
+
+</div>
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="modeltest.core.base.SuiteResult.report" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">report</span><span class="p">(</span><span class="n">style</span><span class="o">=</span><span class="s1">'table'</span><span class="p">)</span></code>
+
+<a href="#modeltest.core.base.SuiteResult.report" class="headerlink" title="Permanent link">&para;</a></h4>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Render the suite outcome.</p>
+<p>Args:
+    style: <code>"table"</code> (console), <code>"json"</code> (machine-readable) or
+        <code>"junit"</code> (XML for CI test reporters).</p>
+<p>Returns:
+    The rendered report as a string.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>modeltest/core/base.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">314</span>
+<span class="normal">315</span>
+<span class="normal">316</span>
+<span class="normal">317</span>
+<span class="normal">318</span>
+<span class="normal">319</span>
+<span class="normal">320</span>
+<span class="normal">321</span>
+<span class="normal">322</span>
+<span class="normal">323</span>
+<span class="normal">324</span>
+<span class="normal">325</span>
+<span class="normal">326</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">report</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">style</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"table"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Render the suite outcome.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        style: ``"table"`` (console), ``"json"`` (machine-readable) or</span>
+<span class="sd">            ``"junit"`` (XML for CI test reporters).</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The rendered report as a string.</span>
+<span class="sd">    """</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">modeltest.core.report</span><span class="w"> </span><span class="kn">import</span> <span class="n">render_report</span>
+
+    <span class="k">return</span> <span class="n">render_report</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="n">style</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="modeltest.core.base.assert_metric" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">assert_metric</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="n">expected</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span></code>
+
+<a href="#modeltest.core.base.assert_metric" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Raise <code>AssertionError</code> when <code>op(actual, expected)</code> is not truthy.</p>
+<p>Small helper for custom tests that express a check as a metric, a
+comparison and a message.</p>
+<p>Args:
+    actual: Computed metric value.
+    expected: Reference value handed to <code>op</code>.
+    op: Comparison callable, e.g. <code>operator.ge</code>.
+    msg: Failure message used verbatim in the <code>AssertionError</code>.</p>
+<p>Raises:
+    AssertionError: If the comparison fails.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>modeltest/core/base.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">335</span>
+<span class="normal">336</span>
+<span class="normal">337</span>
+<span class="normal">338</span>
+<span class="normal">339</span>
+<span class="normal">340</span>
+<span class="normal">341</span>
+<span class="normal">342</span>
+<span class="normal">343</span>
+<span class="normal">344</span>
+<span class="normal">345</span>
+<span class="normal">346</span>
+<span class="normal">347</span>
+<span class="normal">348</span>
+<span class="normal">349</span>
+<span class="normal">350</span>
+<span class="normal">351</span>
+<span class="normal">352</span>
+<span class="normal">353</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">assert_metric</span><span class="p">(</span>
+    <span class="n">actual</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">expected</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="n">op</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="nb">float</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="nb">bool</span><span class="p">],</span> <span class="n">msg</span><span class="p">:</span> <span class="nb">str</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Raise ``AssertionError`` when ``op(actual, expected)`` is not truthy.</span>
+
+<span class="sd">    Small helper for custom tests that express a check as a metric, a</span>
+<span class="sd">    comparison and a message.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        actual: Computed metric value.</span>
+<span class="sd">        expected: Reference value handed to ``op``.</span>
+<span class="sd">        op: Comparison callable, e.g. ``operator.ge``.</span>
+<span class="sd">        msg: Failure message used verbatim in the ``AssertionError``.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        AssertionError: If the comparison fails.</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">op</span><span class="p">(</span><span class="n">actual</span><span class="p">,</span> <span class="n">expected</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+
+<h2 id="modeltest.core.runner" class="doc doc-heading">
+            <code>modeltest.core.runner</code>
+
+
+<a href="#modeltest.core.runner" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents first">
+
+        <p>Test execution entry points.</p>
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="modeltest.core.runner.run_test" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">run_test</span><span class="p">(</span><span class="n">test</span><span class="p">,</span> <span class="n">ctx</span><span class="p">)</span></code>
+
+<a href="#modeltest.core.runner.run_test" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Run a single test against a context.</p>
+<p>Args:
+    test: The test to execute.
+    ctx: Context with model, data and the shared prediction cache.</p>
+<p>Returns:
+    The test's <code>TestResult</code>.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>modeltest/core/runner.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 8</span>
+<span class="normal"> 9</span>
+<span class="normal">10</span>
+<span class="normal">11</span>
+<span class="normal">12</span>
+<span class="normal">13</span>
+<span class="normal">14</span>
+<span class="normal">15</span>
+<span class="normal">16</span>
+<span class="normal">17</span>
+<span class="normal">18</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">run_test</span><span class="p">(</span><span class="n">test</span><span class="p">:</span> <span class="n">ModelTest</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">TestContext</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Run a single test against a context.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        test: The test to execute.</span>
+<span class="sd">        ctx: Context with model, data and the shared prediction cache.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The test's ``TestResult``.</span>
+<span class="sd">    """</span>
+    <span class="k">return</span> <span class="n">test</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="modeltest.core.runner.run_suite" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">run_suite</span><span class="p">(</span><span class="n">suite</span><span class="p">,</span> <span class="n">ctx</span><span class="p">)</span></code>
+
+<a href="#modeltest.core.runner.run_suite" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Run every test in a suite against one shared context.</p>
+<p>Sharing the context is what makes prediction caching work across
+tests: the first prediction is computed and every later test predicting
+on the same data reuses it.</p>
+<p>Args:
+    suite: The suite to execute.
+    ctx: The (single) context handed to every test.</p>
+<p>Returns:
+    Aggregate outcome with one <code>TestResult</code> per test, in order.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>modeltest/core/runner.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">run_suite</span><span class="p">(</span><span class="n">suite</span><span class="p">:</span> <span class="n">ModelSuite</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">TestContext</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">SuiteResult</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Run every test in a suite against one shared context.</span>
+
+<span class="sd">    Sharing the context is what makes prediction caching work across</span>
+<span class="sd">    tests: the first prediction is computed and every later test predicting</span>
+<span class="sd">    on the same data reuses it.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        suite: The suite to execute.</span>
+<span class="sd">        ctx: The (single) context handed to every test.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Aggregate outcome with one ``TestResult`` per test, in order.</span>
+<span class="sd">    """</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">[</span><span class="n">test</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span> <span class="k">for</span> <span class="n">test</span> <span class="ow">in</span> <span class="n">suite</span><span class="o">.</span><span class="n">tests</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">SuiteResult</span><span class="p">(</span><span class="n">suite_name</span><span class="o">=</span><span class="n">suite</span><span class="o">.</span><span class="n">name</span><span class="p">,</span> <span class="n">results</span><span class="o">=</span><span class="n">results</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-module">
+
+
+
+<h2 id="modeltest.core.report" class="doc doc-heading">
+            <code>modeltest.core.report</code>
+
+
+<a href="#modeltest.core.report" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents first">
+
+        <p>Report rendering: console table, JSON, and JUnit XML (for CI/CD).</p>
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="modeltest.core.report.render_report" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">render_report</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">style</span><span class="o">=</span><span class="s1">'table'</span><span class="p">)</span></code>
+
+<a href="#modeltest.core.report.render_report" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Render a <code>SuiteResult</code> in the requested style.</p>
+<p>Args:
+    result: The suite outcome to render.
+    style: <code>"table"</code> (console, default), <code>"json"</code> or <code>"junit"</code>.</p>
+<p>Returns:
+    The rendered report as a string.</p>
+<p>Raises:
+    ValueError: Via the JSON encoder path if the payload is not
+        serializable (should not happen for standard results).</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>modeltest/core/report.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">20</span>
+<span class="normal">21</span>
+<span class="normal">22</span>
+<span class="normal">23</span>
+<span class="normal">24</span>
+<span class="normal">25</span>
+<span class="normal">26</span>
+<span class="normal">27</span>
+<span class="normal">28</span>
+<span class="normal">29</span>
+<span class="normal">30</span>
+<span class="normal">31</span>
+<span class="normal">32</span>
+<span class="normal">33</span>
+<span class="normal">34</span>
+<span class="normal">35</span>
+<span class="normal">36</span>
+<span class="normal">37</span>
+<span class="normal">38</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">render_report</span><span class="p">(</span><span class="n">result</span><span class="p">:</span> <span class="n">SuiteResult</span><span class="p">,</span> <span class="n">style</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"table"</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Render a ``SuiteResult`` in the requested style.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        result: The suite outcome to render.</span>
+<span class="sd">        style: ``"table"`` (console, default), ``"json"`` or ``"junit"``.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The rendered report as a string.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: Via the JSON encoder path if the payload is not</span>
+<span class="sd">            serializable (should not happen for standard results).</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">style</span> <span class="o">==</span> <span class="s2">"json"</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">to_json</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">style</span> <span class="o">==</span> <span class="s2">"junit"</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">to_junit_xml</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_render_table</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="modeltest.core.report.to_json" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">to_json</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></code>
+
+<a href="#modeltest.core.report.to_json" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Serialize a <code>SuiteResult</code> to a JSON string.</p>
+<p>Includes the suite name, aggregate counts and one object per test with
+name, status, detail, duration and recorded metrics.</p>
+<p>Args:
+    result: The suite outcome to serialize.</p>
+<p>Returns:
+    Pretty-printed JSON (2-space indent).</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>modeltest/core/report.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal">52</span>
+<span class="normal">53</span>
+<span class="normal">54</span>
+<span class="normal">55</span>
+<span class="normal">56</span>
+<span class="normal">57</span>
+<span class="normal">58</span>
+<span class="normal">59</span>
+<span class="normal">60</span>
+<span class="normal">61</span>
+<span class="normal">62</span>
+<span class="normal">63</span>
+<span class="normal">64</span>
+<span class="normal">65</span>
+<span class="normal">66</span>
+<span class="normal">67</span>
+<span class="normal">68</span>
+<span class="normal">69</span>
+<span class="normal">70</span>
+<span class="normal">71</span>
+<span class="normal">72</span>
+<span class="normal">73</span>
+<span class="normal">74</span>
+<span class="normal">75</span>
+<span class="normal">76</span>
+<span class="normal">77</span>
+<span class="normal">78</span>
+<span class="normal">79</span>
+<span class="normal">80</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">to_json</span><span class="p">(</span><span class="n">result</span><span class="p">:</span> <span class="n">SuiteResult</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Serialize a ``SuiteResult`` to a JSON string.</span>
+
+<span class="sd">    Includes the suite name, aggregate counts and one object per test with</span>
+<span class="sd">    name, status, detail, duration and recorded metrics.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        result: The suite outcome to serialize.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Pretty-printed JSON (2-space indent).</span>
+<span class="sd">    """</span>
+    <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">"suite"</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">suite_name</span><span class="p">,</span>
+        <span class="s2">"passed"</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">passed</span><span class="p">,</span>
+        <span class="s2">"num_passed"</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">num_passed</span><span class="p">,</span>
+        <span class="s2">"num_failed"</span><span class="p">:</span> <span class="n">result</span><span class="o">.</span><span class="n">num_failed</span><span class="p">,</span>
+        <span class="s2">"tests"</span><span class="p">:</span> <span class="p">[</span>
+            <span class="p">{</span>
+                <span class="s2">"name"</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
+                <span class="s2">"status"</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                <span class="s2">"detail"</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">detail</span><span class="p">,</span>
+                <span class="s2">"duration_ms"</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">duration_ms</span><span class="p">,</span>
+                <span class="s2">"metrics"</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">metrics</span><span class="p">,</span>
+            <span class="p">}</span>
+            <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">results</span>
+        <span class="p">],</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">payload</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h3 id="modeltest.core.report.to_junit_xml" class="doc doc-heading">
+            <code class="highlight language-python"><span class="n">to_junit_xml</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></code>
+
+<a href="#modeltest.core.report.to_junit_xml" class="headerlink" title="Permanent link">&para;</a></h3>
+
+
+    <div class="doc doc-contents ">
+
+        <p>Serialize a <code>SuiteResult</code> to JUnit XML.</p>
+<p>The output wraps everything in the standard <code>&lt;testsuites&gt;</code> element
+expected by CI test reporters (GitHub Actions, Jenkins, GitLab...):
+FAILED tests become <code>&lt;failure&gt;</code> nodes, ERROR tests <code>&lt;error&gt;</code>.</p>
+<p>Args:
+    result: The suite outcome to serialize.</p>
+<p>Returns:
+    The XML document as a string.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>modeltest/core/report.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"> 83</span>
+<span class="normal"> 84</span>
+<span class="normal"> 85</span>
+<span class="normal"> 86</span>
+<span class="normal"> 87</span>
+<span class="normal"> 88</span>
+<span class="normal"> 89</span>
+<span class="normal"> 90</span>
+<span class="normal"> 91</span>
+<span class="normal"> 92</span>
+<span class="normal"> 93</span>
+<span class="normal"> 94</span>
+<span class="normal"> 95</span>
+<span class="normal"> 96</span>
+<span class="normal"> 97</span>
+<span class="normal"> 98</span>
+<span class="normal"> 99</span>
+<span class="normal">100</span>
+<span class="normal">101</span>
+<span class="normal">102</span>
+<span class="normal">103</span>
+<span class="normal">104</span>
+<span class="normal">105</span>
+<span class="normal">106</span>
+<span class="normal">107</span>
+<span class="normal">108</span>
+<span class="normal">109</span>
+<span class="normal">110</span>
+<span class="normal">111</span>
+<span class="normal">112</span>
+<span class="normal">113</span>
+<span class="normal">114</span>
+<span class="normal">115</span>
+<span class="normal">116</span>
+<span class="normal">117</span>
+<span class="normal">118</span>
+<span class="normal">119</span>
+<span class="normal">120</span>
+<span class="normal">121</span></pre></div></td><td class="code"><div><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">to_junit_xml</span><span class="p">(</span><span class="n">result</span><span class="p">:</span> <span class="n">SuiteResult</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Serialize a ``SuiteResult`` to JUnit XML.</span>
+
+<span class="sd">    The output wraps everything in the standard ``&lt;testsuites&gt;`` element</span>
+<span class="sd">    expected by CI test reporters (GitHub Actions, Jenkins, GitLab...):</span>
+<span class="sd">    FAILED tests become ``&lt;failure&gt;`` nodes, ERROR tests ``&lt;error&gt;``.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        result: The suite outcome to serialize.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        The XML document as a string.</span>
+<span class="sd">    """</span>
+    <span class="n">failures</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">results</span> <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">TestStatus</span><span class="o">.</span><span class="n">FAILED</span><span class="p">)</span>
+    <span class="n">errors</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="mi">1</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">results</span> <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">TestStatus</span><span class="o">.</span><span class="n">ERROR</span><span class="p">)</span>
+    <span class="n">total</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">results</span><span class="p">)</span>
+    <span class="n">timestamp</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(</span><span class="n">timespec</span><span class="o">=</span><span class="s2">"seconds"</span><span class="p">)</span>
+
+    <span class="n">xml</span> <span class="o">=</span> <span class="p">[</span><span class="s1">'&lt;?xml version="1.0" encoding="UTF-8"?&gt;'</span><span class="p">]</span>
+    <span class="n">xml</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"&lt;testsuites&gt;"</span><span class="p">)</span>
+    <span class="n">xml</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s1">'&lt;testsuite name="</span><span class="si">{</span><span class="n">_esc</span><span class="p">(</span><span class="n">result</span><span class="o">.</span><span class="n">suite_name</span><span class="p">)</span><span class="si">}</span><span class="s1">" tests="</span><span class="si">{</span><span class="n">total</span><span class="si">}</span><span class="s1">" '</span>
+        <span class="sa">f</span><span class="s1">'failures="</span><span class="si">{</span><span class="n">failures</span><span class="si">}</span><span class="s1">" errors="</span><span class="si">{</span><span class="n">errors</span><span class="si">}</span><span class="s1">" skipped="0" '</span>
+        <span class="sa">f</span><span class="s1">'time="</span><span class="si">{</span><span class="nb">sum</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">duration_ms</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="ow">in</span><span class="w"> </span><span class="n">result</span><span class="o">.</span><span class="n">results</span><span class="p">)</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1000</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">" '</span>
+        <span class="sa">f</span><span class="s1">'timestamp="</span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s1">"&gt;'</span>
+    <span class="p">)</span>
+    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">results</span><span class="p">:</span>
+        <span class="n">xml</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s1">'  &lt;testcase classname="modeltest" name="</span><span class="si">{</span><span class="n">_esc</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="si">}</span><span class="s1">" '</span>
+            <span class="sa">f</span><span class="s1">'time="</span><span class="si">{</span><span class="n">r</span><span class="o">.</span><span class="n">duration_ms</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mi">1000</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">"&gt;'</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">r</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">TestStatus</span><span class="o">.</span><span class="n">FAILED</span><span class="p">:</span>
+            <span class="n">xml</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">'    &lt;failure message="</span><span class="si">{</span><span class="n">_esc</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">detail</span><span class="p">)</span><span class="si">}</span><span class="s1">" /&gt;'</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">r</span><span class="o">.</span><span class="n">status</span> <span class="o">==</span> <span class="n">TestStatus</span><span class="o">.</span><span class="n">ERROR</span><span class="p">:</span>
+            <span class="n">xml</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="sa">f</span><span class="s1">'    &lt;error message="</span><span class="si">{</span><span class="n">_esc</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">detail</span><span class="p">)</span><span class="si">}</span><span class="s1">" /&gt;'</span><span class="p">)</span>
+        <span class="n">xml</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"  &lt;/testcase&gt;"</span><span class="p">)</span>
+    <span class="n">xml</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"&lt;/testsuite&gt;"</span><span class="p">)</span>
+    <span class="n">xml</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s2">"&lt;/testsuites&gt;"</span><span class="p">)</span>
+    <span class="k">return</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">xml</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Copyright &copy; 2026 modeltest contributors
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.sections", "navigation.top", "navigation.tracking", "content.code.copy", "search.suggest", "search.highlight"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>
