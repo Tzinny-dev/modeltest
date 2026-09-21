@@ -4,6 +4,7 @@
 
 [![PyPI version](https://img.shields.io/pypi/v/modeltest.svg)](https://pypi.org/project/modeltest/)
 [![Python](https://img.shields.io/pypi/pyversions/modeltest.svg)](https://pypi.org/project/modeltest/)
+[![CI](https://github.com/Tzinny-dev/modeltest/actions/workflows/validate.yml/badge.svg)](https://github.com/Tzinny-dev/modeltest/actions/workflows/validate.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Donate](https://img.shields.io/badge/donate-PayPal-blue.svg)](https://paypal.me/carlostzin)
 
