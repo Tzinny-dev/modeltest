@@ -62,6 +62,22 @@ needs to be compatible.
    Trusted Publishing (no token needed); a GitHub Release is created with the
    notes.
 
+## Branch protection
+
+`main` is a protected branch:
+
+- Force pushes and deletions are blocked.
+- PR merges require **all** status checks to pass. The required check names
+  mirror the job names in `.github/workflows/validate.yml` (e.g.
+  `Lint + format`, `Run unit tests (py3.9)`).
+
+If you rename or add a job to that workflow, update the required status
+checks too — otherwise mergeable PRs would wait forever on a check that no
+longer exists. Settings: *Branches → main → Require status checks*.
+
+Direct pushes to `main` are still allowed for maintainers; the required
+checks gate PR merges (e.g. Dependabot), not push access.
+
 ## Commit style
 
 Short imperative subject lines (`Add drift test for KS p-value`), one logical
