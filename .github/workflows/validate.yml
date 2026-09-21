@@ -55,7 +55,7 @@ jobs:
       - name: Run test suite with coverage
         run: pytest tests/ --cov=modeltest --junitxml=reports/library.xml
       - name: Publish library test report
-        uses: dorny/test-reporter@v1
+        uses: dorny/test-reporter@v3
         if: always()
         with:
           name: Library tests (py${{ matrix.python-version }})
@@ -91,7 +91,7 @@ jobs:
         continue-on-error: true
 
       - name: Publish model validation report
-        uses: dorny/test-reporter@v1
+        uses: dorny/test-reporter@v3
         if: always()
         with:
           name: Model validation
