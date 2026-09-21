@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "modeltest"
-version = "0.2.0"
+version = "0.2.1"
 description = "If you test your code, why not your model? Unit tests for machine learning models."
 readme = "README.md"
 requires-python = ">=3.9"
@@ -22,6 +22,7 @@ classifiers = [
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
     "Topic :: Software Development :: Quality Assurance",
     "Topic :: Software Development :: Testing",
@@ -54,6 +55,7 @@ modeltest = "modeltest.cli:main"
 Homepage = "https://github.com/Tzinny-dev/modeltest"
 Repository = "https://github.com/Tzinny-dev/modeltest"
 Issues = "https://github.com/Tzinny-dev/modeltest/issues"
+Changelog = "https://github.com/Tzinny-dev/modeltest/blob/main/CHANGELOG.md"
 
 [tool.setuptools.packages.find]
 include = ["modeltest*"]
