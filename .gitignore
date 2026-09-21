@@ -16,3 +16,6 @@ reports/
 
 # MLflow local tracking store
 mlruns/
+
+# MkDocs build output
+site/

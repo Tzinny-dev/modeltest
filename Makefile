@@ -1,7 +1,7 @@
 PYTHON ?= python3
 RUFF ?= ruff
 
-.PHONY: install lint format test example validate precommit clean
+.PHONY: install lint format test example validate precommit docs docs-build docs-deploy clean
 
 install:
 	$(PYTHON) -m pip install -e ".[dev]"
@@ -29,6 +29,19 @@ validate:
 		--train-data examples/train.csv --output reports/model-validation.xml
 
 clean:
-	rm -rf reports examples/model.pkl examples/train.csv examples/validation.csv
+	rm -rf reports examples/model.pkl examples/train.csv examples/validation.csv site
 	find . -name "*.pyc" -delete
 	find . -name "__pycache__" -type d -exec rm -rf {} +
+
+# Live-reload docs server (http://localhost:8000)
+docs:
+	$(PYTHON) -m mkdocs serve
+
+# Strict build (same as CI; fails on broken links/warnings)
+docs-build:
+	$(PYTHON) -m pip install -q mkdocs-material "mkdocstrings[python]"
+	$(PYTHON) -m mkdocs build --strict --site-dir site
+
+# Local deploy to the gh-pages branch (CI does this automatically on push)
+docs-deploy:
+	$(PYTHON) -m mkdocs gh-deploy --force

@@ -1,0 +1,89 @@
+site_name: modeltest
+site_description: >-
+  If you test your code, why not your model? Unit tests for machine learning
+  models: quality, robustness, fairness and data-invariant contracts that run
+  in CI/CD.
+site_url: https://tzinny-dev.github.io/modeltest/
+repo_url: https://github.com/Tzinny-dev/modeltest
+repo_name: Tzinny-dev/modeltest
+copyright: Copyright &copy; 2026 modeltest contributors
+
+theme:
+  name: material
+  icon:
+    repo: fontawesome/brands/github
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+  features:
+    - navigation.sections
+    - navigation.top
+    - navigation.tracking
+    - content.code.copy
+    - search.suggest
+    - search.highlight
+
+nav:
+  - Home: index.md
+  - Usage:
+      - Core concepts: usage/core-concepts.md
+      - CLI: usage/cli.md
+      - YAML suites: usage/yaml-suites.md
+      - Custom tests: usage/custom-tests.md
+      - Model wrappers: usage/wrappers.md
+  - Scenarios:
+      - Overview: scenarios/index.md
+      - Performance: scenarios/performance.md
+      - Robustness: scenarios/robustness.md
+      - Drift: scenarios/drift.md
+      - Fairness: scenarios/fairness.md
+      - Data invariants: scenarios/data.md
+      - Explainability: scenarios/explainability.md
+  - Integrations:
+      - GitHub Actions: integrations/github-actions.md
+      - MLflow: integrations/mlflow.md
+  - API reference:
+      - Core: api/core.md
+      - Config &amp; YAML: api/config.md
+      - Wrappers: api/wrappers.md
+      - Reports: api/report.md
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_style: numpy
+            show_source: true
+            show_root_heading: true
+            members_order: source
+            filters: ["!^_"]
+
+markdown_extensions:
+  - admonition
+  - attr_list
+  - md_in_html
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.highlight
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - tables
+  - toc:
+      permalink: true

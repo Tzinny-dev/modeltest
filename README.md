@@ -5,12 +5,15 @@
 [![PyPI version](https://img.shields.io/pypi/v/modeltest.svg)](https://pypi.org/project/modeltest/)
 [![Python](https://img.shields.io/pypi/pyversions/modeltest.svg)](https://pypi.org/project/modeltest/)
 [![CI](https://github.com/Tzinny-dev/modeltest/actions/workflows/validate.yml/badge.svg)](https://github.com/Tzinny-dev/modeltest/actions/workflows/validate.yml)
+[![Docs](https://img.shields.io/badge/docs-mkdocs--material-blue)](https://tzinny-dev.github.io/modeltest/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Donate](https://img.shields.io/badge/donate-PayPal-blue.svg)](https://paypal.me/carlostzin)
 
 `modeltest` is a unit-testing framework for machine learning models. It lets you
 define contracts for model quality, robustness, fairness, and data invariants,
 and run them automatically in your CI/CD pipeline — just like `pytest` for code.
+
+> 📖 **Full documentation:** [tzinny-dev.github.io/modeltest](https://tzinny-dev.github.io/modeltest/)
 
 ## Quick start
 
@@ -191,6 +194,8 @@ make lint             # ruff check
 make format           # ruff format
 make test             # pytest (with 80% coverage gate)
 make precommit        # install git pre-commit hooks (lint+format)
+make docs             # live-reload docs server
+make docs-build       # strict docs build (same as CI)
 ```
 
 Continuous integration mirrors these gates: `lint`, `dist-check` (build +
@@ -213,4 +218,15 @@ modeltest validate --suite examples/suite.yaml --model examples/model.pkl \
 ```
 
 To point it at your real artifacts, update the `validate-model` job's `run` step paths.
+
+## Documentation
+
+This site's docs (in `docs/`) are built with
+[MkDocs Material](https://squidfunk.github.io/mkdocs-material/) and the API
+reference is generated from docstrings with
+[mkdocstrings](https://mkdocstrings.github.io/). Every push to `main`
+rebuilds and deploys them to GitHub Pages automatically
+([.github/workflows/docs.yml](.github/workflows/docs.yml)); the build runs
+with `--strict`, so broken links or failing API imports fail CI. Preview
+locally with `make docs`.
 

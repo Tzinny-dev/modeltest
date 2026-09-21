@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Documentation site (MkDocs Material) with full usage guides, per-scenario
+  references and an API reference generated from docstrings; deployed to
+  GitHub Pages on every push to `main` (`mkdocs.yml`, `docs/`,
+  `.github/workflows/docs.yml`, `make docs`).
+
 ## [0.2.1] - 2026-09-20
 
 ### Fixed
