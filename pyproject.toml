@@ -52,8 +52,7 @@ mlflow = ["mlflow"]
 modeltest = "modeltest.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/Tzinny-dev/modeltest"
-Documentation = "https://tzinny-dev.github.io/modeltest/"
+Homepage = "https://tzinny-dev.github.io/modeltest/"
 Repository = "https://github.com/Tzinny-dev/modeltest"
 Issues = "https://github.com/Tzinny-dev/modeltest/issues"
 Changelog = "https://github.com/Tzinny-dev/modeltest/blob/main/CHANGELOG.md"

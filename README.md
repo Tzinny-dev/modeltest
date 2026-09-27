@@ -8,6 +8,7 @@
 [![Docs](https://img.shields.io/badge/docs-mkdocs--material-blue)](https://tzinny-dev.github.io/modeltest/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Donate](https://img.shields.io/badge/donate-PayPal-blue.svg)](https://paypal.me/carlostzin)
+[![Buy Me a Coffee](https://img.shields.io/badge/Buy%20me%20a%20coffee-support-yellow.svg)](https://www.buymeacoffee.com/tzinny)
 
 `modeltest` is a unit-testing framework for machine learning models. It lets you
 define contracts for model quality, robustness, fairness, and data invariants,

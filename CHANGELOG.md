@@ -15,6 +15,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Complete docstrings for the entire public API (96 objects — core, CLI,
   runners, reports, all 12 scenarios and the model wrappers), rendered in
   the API reference with mkdocstrings.
+- Google Analytics 4 for the documentation site, loaded only after the
+  visitor grants consent through Material's built-in cookie banner
+  (`mkdocs.yml`: `extra.analytics`, `extra.consent`).
+- Donation buttons (PayPal and Buy Me a Coffee) in the footer of every
+  documentation page, plus GitHub and PyPI icons in the footer social
+  links (`docs/overrides/partials/footer.html`, `mkdocs.yml`).
+- Versioned documentation with mike (`theme.version: mike`); the Docs
+  workflow now runs `mkdocs build --strict` before deploying, so build
+  warnings fail CI.
+
+### Changed
+- PyPI project links: `Homepage` now points to the documentation site
+  (`tzinny-dev.github.io/modeltest`) instead of the GitHub repository,
+  which remains under `Repository` (also removed the now-duplicated
+  `Documentation` entry).
 
 ## [0.2.1] - 2026-09-20
 

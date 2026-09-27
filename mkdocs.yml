@@ -8,8 +8,31 @@ repo_url: https://github.com/Tzinny-dev/modeltest
 repo_name: Tzinny-dev/modeltest
 copyright: Copyright &copy; 2026 modeltest contributors
 
+extra:
+  analytics:
+    provider: google
+    property: G-7HBPMKCQXE
+  consent:
+    title: This website uses cookies
+    description: >-
+      We use Google Analytics to understand how the documentation is used
+      and to improve it. No personal data is sold or shared. You can accept
+      or reject analytics cookies at any time.
+    actions:
+      - accept
+      - reject
+      - manage
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/Tzinny-dev/modeltest
+      name: modeltest on GitHub
+    - icon: simple/pypi
+      link: https://pypi.org/project/modeltest/
+      name: modeltest on PyPI
+
 theme:
   name: material
+  custom_dir: docs/overrides
   icon:
     repo: fontawesome/brands/github
   palette:

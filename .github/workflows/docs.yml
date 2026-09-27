@@ -36,6 +36,9 @@ jobs:
       - name: Check links in docs
         run: python scripts/check_links.py
 
+      - name: Build docs (strict)
+        run: mkdocs build --strict --site-dir site
+
       - name: Deploy versioned docs
         run: |
           set -e
